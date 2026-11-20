@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ABYSSAL AI — Vision Below The Surface | YOLO11-seg</title>
+  <title>ABYSSAL AI — Visión Bajo La Superficie | YOLO11-seg</title>
   <meta name="description" content="Segmentación de instancias submarinas en tiempo real con YOLO11-seg y TrashCan 1.0 para ROVs autónomos." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -13,7 +13,7 @@
   <script src="app.js" defer></script>
 </head>
 <body>
-  <!-- Preloader orbital inspirado en OceanX 2025 -->
+  <!-- Preloader orbital -->
   <div id="preloader" class="preloader" aria-hidden="true">
     <div class="preloader-rings">
       <div class="ring-outer">
@@ -22,10 +22,16 @@
       <div class="ring-inner"></div>
       <div class="preloader-wordmark">ABYSSAL<span>AI</span></div>
     </div>
-    <span class="mono-12 preloader-label">LOADING OCEAN TELEMETRY</span>
+    <span class="mono-12 preloader-label">CARGANDO TELEMETRÍA OCEÁNICA</span>
   </div>
 
-  <!-- Escena WebGL 3D fija en segundo plano + grilla sutil de cruces -->
+  <!-- Capa fotográfica temática por capítulo (Ch 01, 02, 05, 06) -->
+  <div id="photoStage" class="photo-stage" aria-hidden="true">
+    <img id="photoBackdrop" class="photo-backdrop" alt="" />
+    <div class="photo-vignette"></div>
+  </div>
+
+  <!-- Escena WebGL 3D fija en segundo plano (Globo, Red Neuronal 3D, Loss Landscape 3D, Partículas) -->
   <canvas id="webglCanvas" class="webgl-canvas" aria-hidden="true"></canvas>
   <canvas id="fallback2dCanvas" class="webgl-canvas hidden" aria-hidden="true"></canvas>
   <div class="crosshair-overlay" aria-hidden="true"></div>
@@ -39,7 +45,7 @@
           <path id="waveFront" d="M4 18 Q 11 26, 18 18 T 32 18" stroke="#90e0ef" stroke-width="1.5" />
         </svg>
       </span>
-      <span id="audioLabel" class="mono-12">AUDIO OFF</span>
+      <span id="audioLabel" class="mono-12">AUDIO APAGADO</span>
     </button>
 
     <button id="btnBrandHome" class="brand-logo" type="button" aria-label="Volver al inicio">
@@ -48,8 +54,8 @@
 
     <button id="btnChapters" class="chapters-pill is-hidden" type="button" aria-label="Abrir menú de capítulos">
       <span class="pill-text-wrap mono-12">
-        <span class="bw1">CHAPTERS</span>
-        <span class="bw2">CHAPTERS</span>
+        <span class="bw1">CAPÍTULOS</span>
+        <span class="bw2">CAPÍTULOS</span>
       </span>
       <span class="pill-circle">
         <span class="burger-lines" aria-hidden="true">
@@ -68,11 +74,11 @@
   <!-- Sello inferior izquierdo & Control inferior derecho -->
   <div id="yearStamp" class="year-stamp is-hidden" aria-hidden="true">
     <span class="eyebrow-row"><i class="sq"></i><span class="mono-12">2026</span></span>
-    <span class="mono-10 stamp-sub">ABYSSAL AI · ROV<br />SEGMENTATION</span>
+    <span class="mono-10 stamp-sub">ABYSSAL AI ·<br />SEGMENTACIÓN ROV</span>
   </div>
 
   <button id="btnFullscreen" class="share-control" type="button" aria-label="Pantalla completa">
-    <span class="mono-12">FULLSCREEN</span>
+    <span class="mono-12">PANTALLA COMPLETA</span>
     <span class="circle-ring arrow-swap">
       <svg class="arr-out" viewBox="0 0 24 24" fill="none">
         <path d="M7 17L17 7M17 7H9M17 7V15" stroke="#90e0ef" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
@@ -85,138 +91,138 @@
     </span>
   </button>
 
-  <!-- Contenedor virtual de scroll 2400vh + Capa fija desacoplada -->
+  <!-- Contenedor virtual de scroll 2400vh + Stage fijo desacoplado -->
   <div id="scroller" class="scroller">
     <div class="scroller-length"></div>
   </div>
 
   <main id="stickyStage" class="sticky-stage">
 
-        <!-- CAPA HERO (Globo 3D Intro) -->
-        <section id="heroOverlay" class="stage-layer hero-layer">
-          <div class="hero-center">
-            <div class="eyebrow-row hero-eyebrow">
-              <i class="sq"></i>
-              <span class="mono-14">ABYSSAL AI · PROYECTO FINAL IA</span>
-            </div>
+    <!-- CAPA INICIO (Globo 3D Intro) -->
+    <section id="heroOverlay" class="stage-layer hero-layer">
+      <div class="hero-center">
+        <div class="eyebrow-row hero-eyebrow">
+          <i class="sq"></i>
+          <span class="mono-14">ABYSSAL AI · PROYECTO FINAL IA</span>
+        </div>
 
-            <h1 class="title-big">Vision Below<br />The Surface</h1>
+        <h1 class="title-big">Visión Bajo<br />La Superficie</h1>
 
-            <button id="btnEnterExp" class="pill-cta white" type="button">
-              <span class="pill-cta-label">
-                <span class="bw1">ENTER EXPERIENCE</span>
-                <span class="bw2">ENTER EXPERIENCE</span>
-              </span>
-              <span class="cta-orange-circle" aria-hidden="true">
-                <svg viewBox="0 0 20 20" fill="none">
-                  <path d="M4 10H16M16 10L11 5M16 10L11 15" stroke="#00263e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
-              </span>
-            </button>
+        <button id="btnEnterExp" class="pill-cta white" type="button">
+          <span class="pill-cta-label">
+            <span class="bw1">INICIAR EXPERIENCIA</span>
+            <span class="bw2">INICIAR EXPERIENCIA</span>
+          </span>
+          <span class="cta-orange-circle" aria-hidden="true">
+            <svg viewBox="0 0 20 20" fill="none">
+              <path d="M4 10H16M16 10L11 5M16 10L11 15" stroke="#00263e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </span>
+        </button>
 
-            <div class="partners-block">
-              <span class="eyebrow-row"><i class="sq"></i><span class="mono-12">POWERED BY OPEN RESEARCH &amp; EDGE AI</span></span>
-              <div class="partners-row mono-14">
-                <span>YOLO11-SEG</span>
-                <span>TRASHCAN 1.0</span>
-                <span>JAMSTEC J-EDI</span>
-                <span>UMN IRVLAB</span>
-                <span>COLAB GPU T4</span>
-              </div>
-            </div>
+        <div class="partners-block">
+          <span class="eyebrow-row"><i class="sq"></i><span class="mono-12">IMPULSADO POR INVESTIGACIÓN ABIERTA E IA EN EL BORDE</span></span>
+          <div class="partners-row mono-14">
+            <span>YOLO11-SEG</span>
+            <span>TRASHCAN 1.0</span>
+            <span>JAMSTEC J-EDI</span>
+            <span>UMN IRVLAB</span>
+            <span>COLAB GPU T4</span>
           </div>
+        </div>
+      </div>
 
-          <p class="hero-summary text-small">
-            Segmentación de instancias en tiempo real para vehículos submarinos autónomos (ROVs). Delimitación pixel a pixel entre polímeros marinos y ecosistemas protegidos sin colisión biológica.
+      <p class="hero-summary text-small">
+        Segmentación de instancias en tiempo real para vehículos submarinos autónomos (ROVs). Delimitación pixel a pixel entre polímeros marinos y ecosistemas protegidos sin colisión biológica.
+      </p>
+
+      <div class="hero-bottom-meta mono-10">
+        <span>SAMUEL · FABIÁN · ÁNGEL</span>
+        <span>LÍNEA 2 · SEGMENTACIÓN EN VIDEO</span>
+      </div>
+    </section>
+
+    <!-- CAPA DE CAPÍTULOS TEMÁTICOS (01 - 06) -->
+    <section id="chapterOverlay" class="stage-layer chapter-layer is-hidden" aria-live="polite">
+      <div class="chapter-copy">
+        <div class="eyebrow-row">
+          <i class="sq"></i>
+          <span id="chIdxLabel" class="mono-14">CAPÍTULO 01</span>
+        </div>
+        <div id="chLocationLabel" class="mono-16 ch-subtitle-cyan">LA CRISIS OCEÁNICA</div>
+        <h2 id="chTitle" class="ch-headline">Más Allá de las Cajas<br />en Aguas Profundas</h2>
+        <p id="chExcerpt" class="ch-desc">
+          Las cajas rectangulares capturan hasta 68% de coral vivo y fondo marino. La segmentación pixel a pixel habilita agarre seguro.
+        </p>
+        <button id="btnLearnMore" class="pill-cta white learn-more-btn" type="button">
+          <span class="pill-cta-label">
+            <span class="bw1">VER CAPÍTULO</span>
+            <span class="bw2">VER CAPÍTULO</span>
+          </span>
+          <span class="orange-dot" aria-hidden="true"></span>
+        </button>
+      </div>
+
+      <div class="timeline-hint mono-10">
+        <span id="timelineChapterDots" class="timeline-dots"></span>
+        <span>DESPLAZA O USA ← / → · ENTER PARA EXPLORAR</span>
+      </div>
+    </section>
+
+    <!-- CAPA CIERRE (Globo 3D Outro) -->
+    <section id="endingOverlay" class="stage-layer ending-layer is-hidden">
+      <div class="ending-grid">
+        <div class="ending-left">
+          <div class="eyebrow-row">
+            <i class="sq"></i>
+            <span class="mono-14">ABYSSAL AI · MISIÓN COMPLETADA</span>
+          </div>
+          <h2 class="title-big ending-title">Explora el<br />Repositorio</h2>
+        </div>
+
+        <div class="ending-right">
+          <p class="text-regular ending-desc">
+            Código fuente modular, notebook reproducible en Google Colab T4 y consola interactiva de telemetría ROV listos para revisión técnica y despliegue en GitHub Pages.
           </p>
-
-          <div class="hero-bottom-meta mono-10">
-            <span>SAMUEL · FABIÁN · GIRALDO</span>
-            <span>LÍNEA 2 · SEGMENTACIÓN EN VIDEO</span>
-          </div>
-        </section>
-
-        <!-- CAPA DE CAPÍTULOS SOBRE OCÉANO 3D (01 - 06) -->
-        <section id="chapterOverlay" class="stage-layer chapter-layer is-hidden" aria-live="polite">
-          <div class="chapter-copy">
-            <div class="eyebrow-row">
-              <i class="sq"></i>
-              <span id="chIdxLabel" class="mono-14">CHAPTER 01</span>
-            </div>
-            <div id="chLocationLabel" class="mono-16 ch-subtitle-cyan">THE OCEAN CRISIS</div>
-            <h2 id="chTitle" class="ch-headline">Beyond Bounding Boxes<br />in Deep Water</h2>
-            <p id="chExcerpt" class="ch-desc">
-              Los rectángulos tradicionales abarcan hasta 68% de coral vivo y fondo marino. La segmentación pixel a pixel habilita agarre seguro.
-            </p>
-            <button id="btnLearnMore" class="pill-cta white learn-more-btn" type="button">
+          <div class="ending-actions">
+            <a class="pill-cta white" href="https://github.com/angel-ai-dev/abyssal-ai" target="_blank" rel="noopener noreferrer">
               <span class="pill-cta-label">
-                <span class="bw1">LEARN MORE</span>
-                <span class="bw2">LEARN MORE</span>
+                <span class="bw1">ABRIR GITHUB</span>
+                <span class="bw2">ABRIR GITHUB</span>
               </span>
               <span class="orange-dot" aria-hidden="true"></span>
-            </button>
+            </a>
+            <a class="pill-cta glass" href="https://colab.research.google.com/github/angel-ai-dev/abyssal-ai/blob/main/notebooks/abyssal_ai_finetuning_colab.ipynb" target="_blank" rel="noopener noreferrer">
+              <span class="pill-cta-label">
+                <span class="bw1">EJECUTAR EN COLAB</span>
+                <span class="bw2">EJECUTAR EN COLAB</span>
+              </span>
+            </a>
           </div>
+        </div>
+      </div>
 
-          <div class="timeline-hint mono-10">
-            <span id="timelineChapterDots" class="timeline-dots"></span>
-            <span>SCROLL O USA ← / → · ENTER PARA ABRIR DETALLE</span>
-          </div>
-        </section>
-
-        <!-- CAPA ENDING (Globo 3D Outro) -->
-        <section id="endingOverlay" class="stage-layer ending-layer is-hidden">
-          <div class="ending-grid">
-            <div class="ending-left">
-              <div class="eyebrow-row">
-                <i class="sq"></i>
-                <span class="mono-14">ABYSSAL AI · MISSION COMPLETE</span>
-              </div>
-              <h2 class="title-big ending-title">Explore the<br />Repository</h2>
-            </div>
-
-            <div class="ending-right">
-              <p class="text-regular ending-desc">
-                Código fuente modular, notebook reproducible en Google Colab T4 y consola interactiva de telemetría ROV listos para revisión técnica y despliegue en GitHub Pages.
-              </p>
-              <div class="ending-actions">
-                <a class="pill-cta white" href="https://github.com/angel-ai-dev/abyssal-ai" target="_blank" rel="noopener noreferrer">
-                  <span class="pill-cta-label">
-                    <span class="bw1">OPEN GITHUB REPO</span>
-                    <span class="bw2">OPEN GITHUB REPO</span>
-                  </span>
-                  <span class="orange-dot" aria-hidden="true"></span>
-                </a>
-                <a class="pill-cta glass" href="https://colab.research.google.com/github/angel-ai-dev/abyssal-ai/blob/main/notebooks/abyssal_ai_finetuning_colab.ipynb" target="_blank" rel="noopener noreferrer">
-                  <span class="pill-cta-label">
-                    <span class="bw1">RUN IN COLAB T4</span>
-                    <span class="bw2">RUN IN COLAB T4</span>
-                  </span>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <div class="partners-block ending-partners">
-            <span class="eyebrow-row"><i class="sq"></i><span class="mono-12">EQUIPO DE INVESTIGACIÓN E IMPLEMENTACIÓN</span></span>
-            <div class="partners-row mono-14">
-              <span>SAMUEL</span>
-              <span>FABIÁN</span>
-              <span>GIRALDO</span>
-              <span>INTELIGENCIA ARTIFICIAL</span>
-              <span>2026</span>
-            </div>
-          </div>
-        </section>
+      <div class="partners-block ending-partners">
+        <span class="eyebrow-row"><i class="sq"></i><span class="mono-12">EQUIPO DE INVESTIGACIÓN E IMPLEMENTACIÓN</span></span>
+        <div class="partners-row mono-14">
+          <span>SAMUEL</span>
+          <span>FABIÁN</span>
+          <span>ÁNGEL</span>
+          <span>INTELIGENCIA ARTIFICIAL</span>
+          <span>2026</span>
+        </div>
+      </div>
+    </section>
 
   </main>
 
-  <!-- Backdrop y Drawer Flotante Compartido (Chapters Menu <-> Split-Pane Chapter Detail) -->
+  <!-- Backdrop y Drawer Flotante Compartido (Menú Capítulos <-> Panel Editorial Dual) -->
   <div id="drawerBackdrop" class="drawer-backdrop hidden" aria-hidden="true"></div>
 
   <aside id="drawerShell" class="drawer-shell hidden" role="dialog" aria-modal="true" aria-label="Detalle de capítulo">
     <!-- Vista A: Menú rápido de capítulos -->
     <div id="drawerMenuView" class="drawer-menu-view hidden">
-      <h2 class="menu-heading">Chapters</h2>
+      <h2 class="menu-heading">Capítulos</h2>
       <div id="chaptersMenuList" class="chapters-menu-list"></div>
     </div>
 
@@ -226,25 +232,25 @@
       <div id="detailRightPane" class="detail-right-pane">
         <div id="detailEditorialBody" class="detail-editorial-body"></div>
 
-        <!-- Banner Keep Exploring estilo OceanX 2025 -->
+        <!-- Banner Seguir Explorando estilo OceanX 2025 -->
         <div class="keep-exploring-banner">
           <img src="media/ocean_footer.jpg" alt="Superficie oceánica profunda" class="keep-bg" />
           <div class="keep-overlay"></div>
           <div class="keep-content">
-            <span class="eyebrow-row"><i class="sq"></i><span class="mono-12">ABYSSAL AI · EXPEDITION LOG</span></span>
+            <span class="eyebrow-row"><i class="sq"></i><span class="mono-12">ABYSSAL AI · BITÁCORA DE EXPEDICIÓN</span></span>
             <h3>Seguir Explorando</h3>
             <div class="keep-actions">
               <button id="btnNextChapter" class="pill-cta white" type="button">
                 <span class="pill-cta-label">
-                  <span class="bw1">NEXT CHAPTER</span>
-                  <span class="bw2">NEXT CHAPTER</span>
+                  <span class="bw1">SIGUIENTE CAPÍTULO</span>
+                  <span class="bw2">SIGUIENTE CAPÍTULO</span>
                 </span>
                 <span class="orange-dot" aria-hidden="true"></span>
               </button>
               <button id="btnBackTimeline" class="pill-cta glass" type="button">
                 <span class="pill-cta-label">
-                  <span class="bw1">BACK TO TIMELINE</span>
-                  <span class="bw2">BACK TO TIMELINE</span>
+                  <span class="bw1">VOLVER A LA LÍNEA</span>
+                  <span class="bw2">VOLVER A LA LÍNEA</span>
                 </span>
               </button>
             </div>

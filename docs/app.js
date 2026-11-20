@@ -4,11 +4,11 @@
   const $ = (sel, root = document) => root.querySelector(sel);
   const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
 
-  /* ---------- Fallback Metrics (file:// & HTTP compatible) ---------- */
+  /* ---------- Métricas de respaldo offline (compatible con file:// y HTTP) ---------- */
   const FALLBACK_METRICS = {
     status: "preview_pending_colab",
     model: "yolo11n-seg.pt",
-    dataset: "TrashCan 1.0 (Operational 4-Class)",
+    dataset: "TrashCan 1.0 (Taxonomía Operativa 4 Clases)",
     total_epochs: 50,
     best_epoch: 46,
     summary: {
@@ -39,74 +39,86 @@
   const CHAPTERS = [
     {
       id: 1,
-      code: "CHAPTER 01",
-      tag: "THE OCEAN CRISIS",
-      title: "Beyond Bounding Boxes in Deep Water",
-      heroHeadline: "Beyond Bounding Boxes<br />in Deep Water",
-      excerpt: "Los rectángulos tradicionales abarcan hasta 68% de coral vivo y fondo marino. La segmentación pixel a pixel habilita agarre seguro.",
-      badgeDark: "SEA OF JAPAN · ROV DEPTH",
-      badgeLight: "PROBLEM STATEMENT",
+      code: "CAPÍTULO 01",
+      tag: "LA CRISIS OCEÁNICA",
+      title: "Más Allá de las Cajas en Aguas Profundas",
+      heroHeadline: "Más Allá de las Cajas<br />en Aguas Profundas",
+      excerpt: "Las cajas rectangulares capturan hasta 68% de coral vivo y fondo marino. La segmentación pixel a pixel habilita agarre seguro.",
+      badgeDark: "MAR DE JAPÓN · PROFUNDIDAD ROV",
+      badgeLight: "PROBLEMÁTICA",
       thumb: "media/thumb_01.jpg",
+      bgPhoto: "media/bg_crisis_coral.jpg",
+      sceneType: "photo_sonar",
       scrollStop: 0.145,
     },
     {
       id: 2,
-      code: "CHAPTER 02",
-      tag: "TRASHCAN 1.0 DATASET",
-      title: "7,212 Real ROV Frames Reimagined",
-      heroHeadline: "7,212 Real ROV<br />Frames Reimagined",
-      excerpt: "Curación oficial de JAMSTEC y la Universidad de Minnesota: 22 categorías marinas consolidadas en 4 clases operativas para pinza ROV.",
-      badgeDark: "JAMSTEC J-EDI ARCHIVE",
-      badgeLight: "DATASET PIPELINE",
+      code: "CAPÍTULO 02",
+      tag: "DATASET TRASHCAN 1.0",
+      title: "7,212 Fotogramas Reales de ROV",
+      heroHeadline: "7,212 Fotogramas<br />Reales de ROV",
+      excerpt: "Datos reales de JAMSTEC y la Universidad de Minnesota: 22 categorías marinas consolidadas en 4 clases operativas.",
+      badgeDark: "ARCHIVO JAMSTEC J-EDI",
+      badgeLight: "PIPELINE DE DATOS",
       thumb: "media/thumb_02.jpg",
+      bgPhoto: "media/rov_underwater.jpg",
+      sceneType: "photo_polygons",
       scrollStop: 0.285,
     },
     {
       id: 3,
-      code: "CHAPTER 03",
-      tag: "YOLO11-SEG ARCHITECTURE",
-      title: "Dual-Head Mask & Prototype Fusion",
-      heroHeadline: "Dual-Head Mask &amp;<br />Prototype Fusion",
-      excerpt: "Backbone C3k2 con atención espacial C2PSA, combinación lineal de 32 prototipos espaciales y función de pérdida multi-tarea.",
+      code: "CAPÍTULO 03",
+      tag: "ARQUITECTURA YOLO11-SEG",
+      title: "Fusión Dual de Detección y Prototipos",
+      heroHeadline: "Fusión Dual de<br />Detección y Prototipos",
+      excerpt: "Backbone C3k2, atención espacial C2PSA y síntesis lineal de 32 máscaras prototipo en un solo pase.",
       badgeDark: "ULTRALYTICS YOLO11N-SEG",
-      badgeLight: "NEURAL ARCHITECTURE",
+      badgeLight: "ARQUITECTURA NEURONAL",
       thumb: "media/thumb_03.jpg",
+      bgPhoto: null,
+      sceneType: "neural_3d",
       scrollStop: 0.425,
     },
     {
       id: 4,
-      code: "CHAPTER 04",
-      tag: "COLAB T4 FINE-TUNING",
-      title: "Cloud Training & Verified Metrics",
-      heroHeadline: "Cloud Training &amp;<br />Verified Metrics",
-      excerpt: "Entrenamiento automatizado en GPU T4 sin sobrecargar equipos locales, evaluando mAP@50-95 (Mask vs Box) y exportación a ONNX.",
-      badgeDark: "GOOGLE COLAB · T4 GPU",
-      badgeLight: "EVALUATION SUITE",
+      code: "CAPÍTULO 04",
+      tag: "ENTRENAMIENTO EN COLAB T4",
+      title: "Fine-Tuning en la Nube y Métricas Reales",
+      heroHeadline: "Fine-Tuning en la Nube<br />y Métricas Reales",
+      excerpt: "Entrenamiento automatizado en GPU T4 sin sobrecargar equipos locales, evaluando mAP@50-95 (Máscara vs Caja) y exportación ONNX.",
+      badgeDark: "GOOGLE COLAB · GPU T4",
+      badgeLight: "EVALUACIÓN",
       thumb: "media/thumb_04.jpg",
+      bgPhoto: null,
+      sceneType: "loss_3d",
       scrollStop: 0.565,
     },
     {
       id: 5,
-      code: "CHAPTER 05",
-      tag: "LIVE ROV VISION CONSOLE",
-      title: "Real-Time Masking & Bio-Exclusion",
-      heroHeadline: "Real-Time Masking &amp;<br />Bio-Exclusion",
-      excerpt: "Consola de inferencia sincronizada: compara Raw vs. Máscaras, calcula centroide de agarre y frena la pinza ante fauna cercana.",
-      badgeDark: "60 FPS SIM + COLAB MP4",
-      badgeLight: "FUNCTIONAL DEMO",
+      code: "CAPÍTULO 05",
+      tag: "CONSOLA ROV EN VIVO",
+      title: "Segmentación en Video y Bio-Exclusión",
+      heroHeadline: "Segmentación en Video<br />y Bio-Exclusión",
+      excerpt: "Consola interactiva de inferencia: compara video original vs. máscaras y bloquea la pinza ante fauna cercana.",
+      badgeDark: "VISTA ROV + CLIPS COLAB",
+      badgeLight: "DEMO FUNCIONAL",
       thumb: "media/thumb_05.jpg",
+      bgPhoto: "media/demo_rov_frame.jpg",
+      sceneType: "photo_sonar",
       scrollStop: 0.705,
     },
     {
       id: 6,
-      code: "CHAPTER 06",
-      tag: "FUTURE EXPEDITIONS",
-      title: "From Notebook to Embedded Ocean ROV",
-      heroHeadline: "From Notebook to<br />Embedded Ocean ROV",
+      code: "CAPÍTULO 06",
+      tag: "ESCALABILIDAD Y FUTURO",
+      title: "Del Notebook a Vehículos Submarinos Reales",
+      heroHeadline: "Del Notebook a Vehículos<br />Submarinos Reales",
       excerpt: "Limitaciones ópticas bajo turbidez extrema y hoja de ruta hacia TensorRT FP16 en Jetson Orin Nano, visión estéreo 3D y ByteTrack.",
-      badgeDark: "EDGE ROBOTICS ROADMAP",
-      badgeLight: "CONCLUSIONS",
+      badgeDark: "HOJA DE RUTA EDGE",
+      badgeLight: "CONCLUSIONES",
       thumb: "media/thumb_06.jpg",
+      bgPhoto: "media/ocean_footer.jpg",
+      sceneType: "photo_rings",
       scrollStop: 0.845,
     },
   ];
@@ -114,8 +126,8 @@
   const ARCH_NODES = {
     input: {
       tag: "NODO 01 · ENTRADA DE VIDEO",
-      title: "Frame Submarino RGB (640×640×3)",
-      desc: "Normalización de cada cuadro proveniente de la cámara del ROV. Durante fine-tuning en Colab se aplican aumentos HSV y mosaico para robustez ante turbidez y cambios de iluminación LED.",
+      title: "Fotograma Submarino RGB (640×640×3)",
+      desc: "Normalización de cada cuadro proveniente de la cámara del ROV. Durante el fine-tuning en Colab se aplican aumentos HSV y mosaico para robustez ante turbidez y cambios de luz LED.",
       tensor: "[B, 3, 640, 640]",
       formula: "Preprocesamiento Letterbox + [0, 1]",
     },
@@ -136,16 +148,16 @@
     neck: {
       tag: "NODO 04 · FUSIÓN MULTI-ESCALA",
       title: "Neck Bidireccional PANet / FPN",
-      desc: "Combina semántica profunda (qué es el objeto) con resolución espacial fina (dónde termina el borde exacto del plástico vs. el coral).",
+      desc: "Combina semántica profunda (qué es el objeto) con resolución espacial fina (dónde termina el borde exacto del plástico frente al coral).",
       tensor: "Pirámide P3 / P4 / P5 fusionada",
-      formula: "Top-Down + Bottom-Up Feature Aggregation",
+      formula: "Agregación Top-Down + Bottom-Up",
     },
     dethead: {
       tag: "NODO 05A · RAMA DE DETECCIÓN",
       title: "Cabezal Desacoplado + Coeficientes",
       desc: "Predice por cada instancia candidata la caja (BBox), probabilidad de clase (4 clases operativas) y un vector de k=32 coeficientes lineales de máscara.",
-      tensor: "Box [4] + Cls [4] + Coeffs c [32]",
-      formula: "CIoU + DFL + BCE Classification",
+      tensor: "Caja [4] + Clases [4] + Coefs c [32]",
+      formula: "CIoU + DFL + Clasificación BCE",
     },
     protonet: {
       tag: "NODO 05B · RAMA DE PROTOTIPOS",
@@ -157,17 +169,17 @@
     assembly: {
       tag: "NODO 06 · SÍNTESIS + TELEMETRÍA ROV",
       title: "Combinación Lineal + Bio-Exclusión",
-      desc: "Multiplica prototipos P por coeficientes c de cada instancia, aplica sigmoide, recorta al BBox y calcula área real, centroide y distancia mínima a fauna protegida.",
+      desc: "Multiplica prototipos P por coeficientes c de cada instancia, aplica sigmoide, recorta a la caja y calcula área real, centroide y distancia mínima a fauna protegida.",
       tensor: "Máscara Final: [N_inst, H, W]",
-      formula: "Mask_i = σ(P · c_iᵀ) > 0.5 | Crop(BBox)",
+      formula: "Mask_i = σ(P · c_iᵀ) > 0.5 | Recorte(BBox)",
     },
   };
 
-  /* ---------- Estado global ---------- */
+  /* ---------- Estado Global ---------- */
   let activeMetrics = FALLBACK_METRICS;
   let activeChartMode = "map";
   let currentChapterIdx = 0;
-  let drawerState = "closed"; // 'closed' | 'menu' | 'detail'
+  let drawerState = "closed";
   let activeDetailIdx = 0;
 
   let smoothProgress = 0;
@@ -184,10 +196,14 @@
   let simRafId = null;
   let termToken = 0;
 
+  const demoFrameImg = new Image();
+  demoFrameImg.src = "media/demo_rov_frame.jpg";
+
   /* ---------- Elementos DOM ---------- */
   const preloader = $("#preloader");
+  const photoStage = $("#photoStage");
+  const photoBackdrop = $("#photoBackdrop");
   const scroller = $("#scroller");
-  const headerProgressFill = $("#headerProgressFill");
   const btnChapters = $("#btnChapters");
   const yearStamp = $("#yearStamp");
   const heroOverlay = $("#heroOverlay");
@@ -207,7 +223,7 @@
   const detailRightPane = $("#detailRightPane");
   const detailEditorialBody = $("#detailEditorialBody");
 
-  /* ---------- Audio Ambiental Opcional (Web Audio API) ---------- */
+  /* ---------- Audio Ambiental Opcional ---------- */
   let audioCtx = null;
   let audioOn = false;
   let gainNode = null;
@@ -216,7 +232,7 @@
 
   function toggleAudio() {
     audioOn = !audioOn;
-    $("#audioLabel").textContent = audioOn ? "AUDIO ON" : "AUDIO OFF";
+    $("#audioLabel").textContent = audioOn ? "AUDIO ACTIVO" : "AUDIO APAGADO";
     if (audioOn) {
       try {
         if (!audioCtx) {
@@ -270,17 +286,14 @@
       return;
     }
     const t0 = performance.now();
-    const duration = 680;
+    const duration = 660;
     function step(now) {
       const k = Math.min(1, (now - t0) / duration);
       const ease = 1 - Math.pow(1 - k, 3);
       scroller.scrollTop = startY + (endY - startY) * ease;
       targetProgress = scroller.scrollTop / maxScroll;
-      if (k < 1) {
-        scrollAnimId = requestAnimationFrame(step);
-      } else {
-        scrollAnimId = null;
-      }
+      if (k < 1) scrollAnimId = requestAnimationFrame(step);
+      else scrollAnimId = null;
     }
     scrollAnimId = requestAnimationFrame(step);
   }
@@ -321,6 +334,8 @@
     });
   }
 
+  let activePhotoSrc = "";
+
   function updateStageOverlays(p) {
     document.documentElement.style.setProperty("--progress", p.toFixed(4));
     const inHero = p < 0.075;
@@ -336,9 +351,10 @@
     if (inTimeline) {
       const normalized = (p - 0.08) / 0.82;
       const idx = Math.min(CHAPTERS.length - 1, Math.max(0, Math.floor(normalized * CHAPTERS.length)));
-      if (idx !== currentChapterIdx || chIdxLabel.textContent !== CHAPTERS[idx].code) {
+      const ch = CHAPTERS[idx];
+
+      if (idx !== currentChapterIdx || chIdxLabel.textContent !== ch.code) {
         currentChapterIdx = idx;
-        const ch = CHAPTERS[idx];
         chIdxLabel.textContent = ch.code;
         chLocationLabel.textContent = ch.tag;
         chTitle.innerHTML = ch.heroHeadline;
@@ -346,6 +362,19 @@
         $$(".timeline-dot-btn", timelineChapterDots).forEach((d, i) => d.classList.toggle("active", i === idx));
         $$(".menu-chapter-row", chaptersMenuList).forEach((r, i) => r.classList.toggle("current", i === idx));
       }
+
+      if (ch.bgPhoto) {
+        if (activePhotoSrc !== ch.bgPhoto) {
+          activePhotoSrc = ch.bgPhoto;
+          photoBackdrop.src = ch.bgPhoto;
+        }
+        photoStage.classList.add("active");
+        photoBackdrop.style.transform = `scale(1.06) translate(${(-mouse.nx * 14).toFixed(1)}px, ${(-mouse.ny * 10).toFixed(1)}px)`;
+      } else {
+        photoStage.classList.remove("active");
+      }
+    } else {
+      photoStage.classList.remove("active");
     }
   }
 
@@ -365,7 +394,7 @@
     else document.exitFullscreen?.().catch(() => {});
   });
 
-  /* ---------- Shared Morphing Drawer System ---------- */
+  /* ---------- Drawer Flotante Compartido ---------- */
   function openMenuDrawer() {
     drawerState = "menu";
     scroller.classList.add("locked");
@@ -461,7 +490,7 @@
     }
   });
 
-  /* ---------- Renderizado Dinámico de los 6 Capítulos en el Split-Pane ---------- */
+  /* ---------- Renderizado de los 6 Capítulos en el Split-Pane ---------- */
   function renderChapterDetail(idx) {
     if (simRafId) {
       cancelAnimationFrame(simRafId);
@@ -482,52 +511,56 @@
           <img src="media/sat_sea_of_japan.jpg" alt="Imagen satelital del Mar de Japón" />
           <div class="sat-reticle">
             <div class="reticle-box"><i></i></div>
-            <div class="sat-reticle-label mono-12">SEA OF JAPAN<br />JAMSTEC ROV TRENCH</div>
+            <div class="sat-reticle-label mono-12">MAR DE JAPÓN<br />FOSA DE OPERACIÓN ROV</div>
           </div>
           <div class="sat-footer-bar mono-10">
             <span>36.2048° N · 138.2529° E</span>
-            <span>DEPTH RANGE: 180M – 3,800M</span>
+            <span>RANGO PROFUNDIDAD: 180M – 3,800M</span>
           </div>
         </div>
       `;
       detailEditorialBody.innerHTML = `
         ${headerBadges}
         <h3>Limpiar el océano sin destruir la vida bentónica alrededor de los residuos.</h3>
-        <p class="editorial-p">En profundidades donde la longitud de onda roja desaparece y los focos del ROV generan retrodispersión (<em>marine snow</em>), bolsas plásticas y redes fantasma flotan junto a corales y peces.</p>
+        <p class="editorial-p">En profundidades donde la longitud de onda roja desaparece y los focos del ROV generan retrodispersión (<em>nieve marina</em>), bolsas plásticas y redes fantasma flotan junto a corales y peces.</p>
         <div class="editorial-stat-grid">
-          <div class="ed-stat-card"><strong>14M+</strong><span>Toneladas de plástico ingresan al océano cada año</span></div>
+          <div class="ed-stat-card"><strong>14M+</strong><span>Toneladas de plástico ingresan al océano al año</span></div>
           <div class="ed-stat-card"><strong>~90%</strong><span>Operación ROV actual sigue siendo teleoperada</span></div>
-          <div class="ed-stat-card"><strong>68.4%</strong><span>Área errónea en BBox sobre objetos diagonales</span></div>
+          <div class="ed-stat-card"><strong>68.4%</strong><span>Área errónea de caja sobre objetos diagonales</span></div>
         </div>
-        <h3>Por qué Bounding Boxes fallan frente a YOLO11-seg</h3>
-        <p class="editorial-p">Arrastra el divisor central para comparar un detector rectangular tradicional frente a máscaras poligonales exactas con halo de exclusión biológica:</p>
+        <h3>Comparador real: Caja Rectangular vs. YOLO11-seg</h3>
+        <p class="editorial-p">Arrastra el divisor sobre la fotografía real de inspección submarina para comparar cómo una caja rectangular invade el coral frente al contorno exacto de nuestra máscara poligonal:</p>
         <div class="ed-compare-box">
           <div class="ed-compare-layer">
-            <svg viewBox="0 0 960 440">
-              <rect width="960" height="440" fill="#031322" />
-              <path d="M0,380 Q240,350 480,382 T960,368 L960,440 L0,440 Z" fill="#071f33" />
-              <path d="M510,380 C495,330 470,295 485,255 C500,235 518,265 524,295 C532,240 558,210 572,245 C585,280 562,315 568,340 C584,295 612,280 622,310 C630,335 604,365 595,382 Z" fill="#134e4a" stroke="#1f7a6e" stroke-width="2" />
-              <path d="M250,150 L295,128 L465,245 L498,288 L452,318 L412,292 L245,176 Z" fill="#9fb6c3" opacity="0.85" />
-              <rect x="235" y="122" width="318" height="205" fill="rgba(255,71,105,0.16)" stroke="#ff4769" stroke-width="3" stroke-dasharray="8 6" />
-              <text x="90" y="106" fill="#ff4769" font-family="DM Mono" font-size="15">BBOX DEBRIS 0.89 · 68.4% RUIDO EN CORAL</text>
-              <text x="115" y="362" fill="#ff4769" font-family="DM Mono" font-size="14">UNSAFE GRASP: PINZA INTERSECA CORAL</text>
+            <svg viewBox="0 0 1280 720" preserveAspectRatio="xMidYMid slice">
+              <image href="media/rov_underwater.jpg" width="1280" height="720" />
+              <rect x="0" y="0" width="1280" height="720" fill="rgba(0,10,20,0.22)" />
+              <rect x="740" y="472" width="166" height="154" fill="rgba(255,71,105,0.24)" stroke="#ff4769" stroke-width="5" stroke-dasharray="14 10" />
+              <rect x="850" y="380" width="154" height="122" fill="rgba(255,183,3,0.18)" stroke="#ffb703" stroke-width="4" stroke-dasharray="10 8" />
+              <rect x="520" y="62" width="490" height="44" rx="8" fill="rgba(0,13,21,0.86)" />
+              <text x="538" y="91" fill="#ff4769" font-family="DM Mono" font-size="22" font-weight="500">CAJA 0.89 · CUBRE 68.4% DE CORAL VIVO</text>
+              <rect x="650" y="646" width="520" height="42" rx="8" fill="rgba(0,13,21,0.86)" />
+              <text x="668" y="674" fill="#ff4769" font-family="DM Mono" font-size="20">AGARRE INSEGURO · RIESGO DE COLISIÓN</text>
             </svg>
           </div>
           <div class="ed-compare-layer ed-compare-after" id="edCompareAfter">
-            <svg viewBox="0 0 960 440">
-              <rect width="960" height="440" fill="#031322" />
-              <path d="M0,380 Q240,350 480,382 T960,368 L960,440 L0,440 Z" fill="#071f33" />
-              <path d="M510,380 C495,330 470,295 485,255 C500,235 518,265 524,295 C532,240 558,210 572,245 C585,280 562,315 568,340 C584,295 612,280 622,310 C630,335 604,365 595,382 Z" fill="rgba(0,229,160,0.38)" stroke="#00e5a0" stroke-width="2.5" />
-              <path d="M466,386 C452,318 456,222 548,206 C618,202 648,292 612,386 Z" fill="none" stroke="#00e5a0" stroke-width="1.5" stroke-dasharray="5 5" />
-              <path d="M250,150 L295,128 L465,245 L498,288 L452,318 L412,292 L245,176 Z" fill="rgba(144,224,239,0.42)" stroke="#90e0ef" stroke-width="2.8" />
-              <circle cx="332" cy="196" r="18" fill="none" stroke="#90e0ef" stroke-width="2" />
-              <circle cx="332" cy="196" r="4" fill="#00e5a0" />
-              <text x="515" y="106" fill="#90e0ef" font-family="DM Mono" font-size="15">MASK 0.94 · CENTROIDE (332, 196)</text>
-              <text x="515" y="405" fill="#00e5a0" font-family="DM Mono" font-size="14">SAFE GRASP VECTOR · 0.0% DAÑO BIOLÓGICO</text>
+            <svg viewBox="0 0 1280 720" preserveAspectRatio="xMidYMid slice">
+              <image href="media/rov_underwater.jpg" width="1280" height="720" />
+              <polygon points="84,185 495,180 515,320 420,468 135,442 80,295" fill="rgba(139,92,246,0.24)" stroke="#8b5cf6" stroke-width="4" />
+              <polygon points="846,534 862,448 920,418 982,456 992,554 926,574" fill="rgba(0,229,160,0.34)" stroke="#00e5a0" stroke-width="4.5" />
+              <ellipse cx="918" cy="498" rx="108" ry="104" fill="none" stroke="#00e5a0" stroke-width="2.5" stroke-dasharray="9 7" />
+              <polygon points="758,522 792,482 848,494 888,554 860,616 798,608 752,554" fill="rgba(144,224,239,0.42)" stroke="#90e0ef" stroke-width="5" />
+              <polygon points="886,422 924,386 986,412 968,468 914,458" fill="rgba(144,224,239,0.38)" stroke="#90e0ef" stroke-width="4" />
+              <circle cx="812" cy="548" r="22" fill="none" stroke="#90e0ef" stroke-width="3.5" />
+              <circle cx="812" cy="548" r="5" fill="#00e5a0" />
+              <rect x="650" y="62" width="530" height="44" rx="8" fill="rgba(0,13,21,0.88)" />
+              <text x="668" y="91" fill="#90e0ef" font-family="DM Mono" font-size="22" font-weight="500">MÁSCARA 0.94 · CENTROIDE SEGURO (812, 548)</text>
+              <rect x="680" y="646" width="500" height="42" rx="8" fill="rgba(0,13,21,0.88)" />
+              <text x="698" y="674" fill="#00e5a0" font-family="DM Mono" font-size="20">AGARRE SEGURO · 0.0% DAÑO EN CORAL</text>
             </svg>
           </div>
           <div class="ed-compare-handle" id="edCompareHandle"><span class="ed-compare-knob">◄►</span></div>
-          <input id="edCompareRange" class="ed-compare-range" type="range" min="8" max="92" value="50" aria-label="Comparador Bounding Box vs Segmentación" />
+          <input id="edCompareRange" class="ed-compare-range" type="range" min="8" max="92" value="50" aria-label="Comparador Caja vs Segmentación" />
         </div>
       `;
       const range = $("#edCompareRange", detailEditorialBody);
@@ -541,13 +574,13 @@
       detailLeftPane.innerHTML = `
         <div class="sat-stage">
           <img src="media/rov_underwater.jpg" alt="ROV submarino iluminando residuos plásticos y coral" />
-          <div class="sat-reticle" style="top: 66%; left: 62%;">
+          <div class="sat-reticle" style="top: 68%; left: 64%;">
             <div class="reticle-box"><i></i></div>
-            <div class="sat-reticle-label mono-12">POLYGON GROUND TRUTH<br />FLEXIBLE POLYMER vs CORAL</div>
+            <div class="sat-reticle-label mono-12">POLÍGONOS GROUND TRUTH<br />POLÍMERO FLEXIBLE vs CORAL</div>
           </div>
           <div class="sat-footer-bar mono-10">
-            <span>SOURCE: TRASHCAN 1.0 (J-EDI)</span>
-            <span>7,212 REAL RGB FRAMES</span>
+            <span>FUENTE: TRASHCAN 1.0 (J-EDI)</span>
+            <span>7,212 FOTOGRAMAS RGB REALES</span>
           </div>
         </div>
       `;
@@ -582,7 +615,7 @@
       detailLeftPane.innerHTML = `
         <div class="stage-dark-console">
           <div class="stage-dark-header">
-            <span class="mono-12" style="color:var(--cyan);">INTERACTIVE TENSOR FLOW · CLICK ANY NODE</span>
+            <span class="mono-12" style="color:var(--cyan);">FLUJO INTERACTIVO DE TENSORES · PULSA UN NODO</span>
             <button id="btnToggleArchFlow" class="dark-mini-btn" type="button">PAUSAR FLUJO</button>
           </div>
           <svg id="archSvg" viewBox="0 0 820 380" class="arch-svg">
@@ -590,20 +623,20 @@
             <path id="pathDet" d="M435,190 C485,190 495,98 555,98 L695,98 L738,175" fill="none" stroke="rgba(255,116,56,0.38)" stroke-width="3" />
             <path id="pathProto" d="M435,190 C485,190 495,282 555,282 L695,282 L738,205" fill="none" stroke="rgba(0,229,160,0.38)" stroke-width="3" />
             <g id="archPulses"></g>
-            <g class="arch-node active" data-node="input"><rect x="20" y="150" width="110" height="80" rx="10" /><text x="75" y="182">INPUT</text><text class="sub" x="75" y="204">640×640×3</text></g>
+            <g class="arch-node active" data-node="input"><rect x="20" y="150" width="110" height="80" rx="10" /><text x="75" y="182">ENTRADA</text><text class="sub" x="75" y="204">640×640×3</text></g>
             <g class="arch-node" data-node="backbone"><rect x="150" y="150" width="115" height="80" rx="10" /><text x="207" y="182">BACKBONE</text><text class="sub" x="207" y="204">C3k2 + Conv</text></g>
             <g class="arch-node" data-node="attention"><rect x="285" y="150" width="115" height="80" rx="10" /><text x="342" y="182">SPPF + C2PSA</text><text class="sub" x="342" y="204">Atención Espacial</text></g>
             <g class="arch-node" data-node="neck"><rect x="420" y="150" width="95" height="80" rx="10" /><text x="467" y="182">NECK</text><text class="sub" x="467" y="204">PANet FPN</text></g>
-            <g class="arch-node" data-node="dethead"><rect x="545" y="54" width="140" height="86" rx="10" /><text x="615" y="88">DETECT HEAD</text><text class="sub" x="615" y="108">Box+Cls+k=32</text><text class="sub" x="615" y="124">Coeffs c</text></g>
+            <g class="arch-node" data-node="dethead"><rect x="545" y="54" width="140" height="86" rx="10" /><text x="615" y="88">DETECCIÓN</text><text class="sub" x="615" y="108">Caja+Cls+k=32</text><text class="sub" x="615" y="124">Coefs c</text></g>
             <g class="arch-node" data-node="protonet"><rect x="545" y="240" width="140" height="86" rx="10" /><text x="615" y="274">PROTONET</text><text class="sub" x="615" y="294">32 Prototipos P</text><text class="sub" x="615" y="310">160×160</text></g>
-            <g class="arch-node" data-node="assembly"><rect x="705" y="142" width="102" height="96" rx="10" /><text x="756" y="176">MASK</text><text class="sub" x="756" y="196">σ(P · cᵀ)</text><text class="sub" x="756" y="216">+ ROV HUD</text></g>
+            <g class="arch-node" data-node="assembly"><rect x="705" y="142" width="102" height="96" rx="10" /><text x="756" y="176">MÁSCARA</text><text class="sub" x="756" y="196">σ(P · cᵀ)</text><text class="sub" x="756" y="216">+ HUD ROV</text></g>
           </svg>
         </div>
       `;
       detailEditorialBody.innerHTML = `
         ${headerBadges}
-        <h3>Arquitectura single-shot de segmentación por prototipos y coeficientes lineales.</h3>
-        <p class="editorial-p">A diferencia de arquitecturas pesadas en dos etapas (como Mask R-CNN o SAM 2), <strong>YOLO11n-seg</strong> predice cajas, clases y máscaras en un solo pase hacia adelante sobre GPU o edge embebido.</p>
+        <h3>Arquitectura de una sola etapa por prototipos y coeficientes lineales.</h3>
+        <p class="editorial-p">A diferencia de modelos pesados en dos etapas (como Mask R-CNN o SAM 2), <strong>YOLO11n-seg</strong> predice cajas, clases y máscaras en un solo pase sobre GPU o hardware embebido.</p>
         <div class="ed-inspector-card">
           <span id="inspTag" class="mono-10">${ARCH_NODES.input.tag}</span>
           <h4 id="inspTitle">${ARCH_NODES.input.title}</h4>
@@ -613,7 +646,7 @@
             <div class="ed-kv-box"><span class="mono-10">OPERACIÓN CLAVE</span><strong id="inspFormula">${ARCH_NODES.input.formula}</strong></div>
           </div>
         </div>
-        <p class="editorial-p"><strong>Función de pérdida multi-tarea:</strong> <code>L = λ_box·L_CIoU+DFL + λ_seg·L_BCE(Mask) + λ_cls·L_BCE</code>, evaluando la pérdida de máscara pixel a pixel dentro del área de cada bounding box.</p>
+        <p class="editorial-p"><strong>Función de pérdida multi-tarea:</strong> <code>L = λ_box·L_CIoU+DFL + λ_seg·L_BCE(Mask) + λ_cls·L_BCE</code>, evaluando la pérdida de máscara pixel a pixel dentro del área de cada caja.</p>
       `;
       initArchDiagramInteractive();
     } else if (idx === 3) {
@@ -627,7 +660,7 @@
           <div class="dark-term-box">
             <div class="dark-term-bar mono-10">
               <span>notebooks/abyssal_ai_finetuning_colab.ipynb</span>
-              <span style="color:${isVerified ? "var(--emerald)" : "var(--amber)"};">${isVerified ? "VERIFIED" : "PREVIEW"}</span>
+              <span style="color:${isVerified ? "var(--emerald)" : "var(--amber)"};">${isVerified ? "VERIFICADO" : "VISTA PREVIA"}</span>
             </div>
             <pre id="colabTermLog" class="dark-term-pre"></pre>
           </div>
@@ -637,18 +670,18 @@
       detailEditorialBody.innerHTML = `
         ${headerBadges}
         <h3>Validación cuantitativa sobre máscaras vs. cajas y exportación a ONNX.</h3>
-        <p class="editorial-p">Estado actual del archivo <code>docs/media/metrics_summary.json</code>: <strong>${isVerified ? "COLAB VERIFIED RUN (Pesos reales cargados)" : "PREVIEW DATA (Ejecuta el notebook en Colab para poblar tus pesos reales)"}</strong>.</p>
+        <p class="editorial-p">Estado actual de <code>docs/media/metrics_summary.json</code>: <strong>${isVerified ? "CORRIDA VERIFICADA DE COLAB (Pesos reales cargados)" : "DATOS DE VISTA PREVIA (Ejecuta el notebook en Colab para cargar tus pesos reales)"}</strong>.</p>
         <div class="editorial-stat-grid">
-          <div class="ed-stat-card"><strong>${((s.map50_mask || 0) * 100).toFixed(1)}%</strong><span>mAP@50 (Mask)</span></div>
-          <div class="ed-stat-card"><strong>${((s.map50_95_mask || 0) * 100).toFixed(1)}%</strong><span>mAP@50-95 (Mask)</span></div>
+          <div class="ed-stat-card"><strong>${((s.map50_mask || 0) * 100).toFixed(1)}%</strong><span>mAP@50 (Máscara)</span></div>
+          <div class="ed-stat-card"><strong>${((s.map50_95_mask || 0) * 100).toFixed(1)}%</strong><span>mAP@50-95 (Máscara)</span></div>
           <div class="ed-stat-card"><strong>${(s.inference_ms_t4 || 9.4).toFixed(1)} ms</strong><span>Latencia GPU T4</span></div>
         </div>
         <div class="ed-chart-wrap">
           <div class="ed-chart-head">
-            <strong id="chartTitle" class="mono-12">Evolución mAP por Época (Mask vs Box)</strong>
+            <strong id="chartTitle" class="mono-12">Evolución mAP por Época (Máscara vs Caja)</strong>
             <div style="display:flex; gap:6px;">
               <button class="ed-tab-btn ${activeChartMode === "map" ? "active" : ""}" data-chart="map" type="button">mAP@50 / 50-95</button>
-              <button class="ed-tab-btn ${activeChartMode === "loss" ? "active" : ""}" data-chart="loss" type="button">Loss Convergencia</button>
+              <button class="ed-tab-btn ${activeChartMode === "loss" ? "active" : ""}" data-chart="loss" type="button">Convergencia Pérdidas</button>
             </div>
           </div>
           <canvas id="metricsChart" width="620" height="240"></canvas>
@@ -663,8 +696,8 @@
           btn.classList.add("active");
           activeChartMode = btn.dataset.chart || "map";
           $("#chartTitle", detailEditorialBody).textContent = activeChartMode === "map"
-            ? "Evolución mAP por Época (Mask vs Box)"
-            : "Convergencia de Pérdidas (Seg & Box Loss)";
+            ? "Evolución mAP por Época (Máscara vs Caja)"
+            : "Convergencia de Pérdidas (Segmentación y Caja)";
           drawMetricsChart();
         });
       });
@@ -672,7 +705,7 @@
       detailLeftPane.innerHTML = `
         <div class="stage-dark-console">
           <div class="stage-dark-header">
-            <span id="demoSourceBadge" class="mono-10" style="color:var(--cyan);">${usingRealVideo ? "CLIP PRE-RENDERIZADO COLAB (REAL)" : "SIMULADOR INTERACTIVO ROV 60 FPS"}</span>
+            <span id="demoSourceBadge" class="mono-10" style="color:var(--cyan);">${usingRealVideo ? "CLIP PRE-RENDERIZADO COLAB (REAL)" : "SIMULACIÓN FOTOGRÁFICA ROV EN VIVO"}</span>
             <label class="dark-mini-btn" style="cursor:pointer;">
               <span>Cargar Media Colab</span>
               <input id="bundleFileInput" type="file" multiple accept=".mp4,.json" hidden />
@@ -688,9 +721,9 @@
           </div>
           <div class="stage-dark-header" id="visorModePills">
             <div style="display:flex; gap:6px; flex-wrap:wrap;">
-              <button class="dark-mini-btn ${visorMode === "raw" ? "active" : ""}" data-mode="raw" type="button">RAW FEED</button>
-              <button class="dark-mini-btn ${visorMode === "masks" ? "active" : ""}" data-mode="masks" type="button">MASKS</button>
-              <button class="dark-mini-btn ${visorMode === "split" ? "active" : ""}" data-mode="split" type="button">SPLIT</button>
+              <button class="dark-mini-btn ${visorMode === "raw" ? "active" : ""}" data-mode="raw" type="button">ORIGINAL</button>
+              <button class="dark-mini-btn ${visorMode === "masks" ? "active" : ""}" data-mode="masks" type="button">MÁSCARAS</button>
+              <button class="dark-mini-btn ${visorMode === "split" ? "active" : ""}" data-mode="split" type="button">DIVIDIDO</button>
               <button class="dark-mini-btn ${visorMode === "hud" ? "active" : ""}" data-mode="hud" type="button">HUD + BIO</button>
             </div>
             <button id="btnVisorPlay" class="dark-mini-btn" type="button">${visorPlaying ? "Pausar" : "Reanudar"}</button>
@@ -700,10 +733,10 @@
       detailEditorialBody.innerHTML = `
         ${headerBadges}
         <h3>Consola de visión en vivo con protocolo automático de bio-exclusión.</h3>
-        <p class="editorial-p">Cada máscara segmentada calcula área real en píxeles, centroide de agarre y distancia mínima hacia fauna protegida. Cuando un pez cruza el umbral (&lt; 45 px), el estado cambia en tiempo real a <strong>BIO_EXCLUSION_HOLD</strong>.</p>
+        <p class="editorial-p">Cada máscara calcula área real en píxeles, centroide de agarre y distancia mínima hacia fauna protegida. Cuando un pez cruza el umbral (&lt; 45 px), el estado cambia en tiempo real a <strong>BLOQUEO BIO-EXCLUSIÓN</strong>.</p>
         <div id="telStatusBox" class="ed-tel-status">
           <span class="mono-12">PROTOCOLO DE PINZA ROV</span>
-          <strong id="telGraspStatus">SAFE_GRASP</strong>
+          <strong id="telGraspStatus">AGARRE SEGURO</strong>
         </div>
         <div class="editorial-stat-grid">
           <div class="ed-stat-card"><strong id="telFps">60.0</strong><span>FPS Visor</span></div>
@@ -712,9 +745,9 @@
         </div>
         <div class="ed-kv-row" style="margin-bottom:2rem;">
           <div class="ed-kv-box"><span class="mono-10">ÁREA RESIDUO / LATENCIA</span><strong id="telAreaLat">8.4% · 9.4 ms</strong></div>
-          <div class="ed-kv-box"><span class="mono-10">CENTROIDE OBJETIVO</span><strong id="telCentroid">(340, 210)</strong></div>
+          <div class="ed-kv-box"><span class="mono-10">CENTROIDE OBJETIVO</span><strong id="telCentroid">(276, 195)</strong></div>
         </div>
-        <span class="mono-10" style="color:#4f7288;">INSTANCIAS ACTIVAS EN FRAME</span>
+        <span class="mono-10" style="color:#4f7288;">INSTANCIAS ACTIVAS EN CUADRO</span>
         <div id="telInstancesList" class="ed-inst-list"></div>
       `;
       bindLiveVisorControls();
@@ -725,11 +758,11 @@
           <img src="media/sat_sea_of_japan.jpg" alt="Proyección de despliegue embebido en el Pacífico" />
           <div class="sat-reticle" style="top: 38%; left: 54%;">
             <div class="reticle-box"><i></i></div>
-            <div class="sat-reticle-label mono-12">EDGE DEPLOYMENT TARGET<br />JETSON ORIN NANO · FP16</div>
+            <div class="sat-reticle-label mono-12">DESPLIEGUE EN EL BORDE<br />JETSON ORIN NANO · FP16</div>
           </div>
           <div class="sat-footer-bar mono-10">
-            <span>EXPORT: ONNX / TENSORRT</span>
-            <span>3D STEREO + BYTETRACK</span>
+            <span>EXPORTACIÓN: ONNX / TENSORRT</span>
+            <span>ESTÉREO 3D + BYTETRACK</span>
           </div>
         </div>
       `;
@@ -740,12 +773,12 @@
         <p class="editorial-p"><strong>Limitaciones físicas:</strong> En aguas con alta turbidez, retrodispersión LED (<em>backscatter</em>) o pérdida cromática severa, los bordes de plásticos translúcidos pierden contraste y la distancia actual opera en plano 2D de imagen.</p>
         <div class="ed-tax-grid">
           <div class="ed-tax-card">
-            <span class="mono-10">ROADMAP 01</span>
+            <span class="mono-10">HOJA DE RUTA 01</span>
             <h4>TensorRT FP16 Embebido</h4>
             <p>Despliegue del archivo <code>best.onnx</code> cuantizado en <strong>NVIDIA Jetson Orin Nano</strong> a bordo de ROVs reales de bajo consumo.</p>
           </div>
           <div class="ed-tax-card" style="border-top-color:#00b880;">
-            <span class="mono-10">ROADMAP 02</span>
+            <span class="mono-10">HOJA DE RUTA 02</span>
             <h4>Estéreo 3D + ByteTrack</h4>
             <p>Proyección de máscaras sobre mapa de disparidad estéreo (X, Y, Z) y persistencia de ID frente a corrientes marinas.</p>
           </div>
@@ -828,16 +861,16 @@
     pre.innerHTML = "";
     const lines = [
       { cls: "t-cmd", text: "$ nvidia-smi --query-gpu=name,memory.total --format=csv,noheader" },
-      { cls: "t-ok", text: "Tesla T4, 15360 MiB  |  CUDA 12.x Ready" },
+      { cls: "t-ok", text: "Tesla T4, 15360 MiB  |  CUDA 12.x Lista" },
       { cls: "t-cmd", text: "$ curl -L ... -o dataset.zip  # TrashCan 1.0 (553 MB)" },
       { cls: "", text: "Mapeando 22 clases JAMSTEC → 4 clases operativas ROV..." },
-      { cls: "t-ok", text: "Dataset validado: 6,065 train imgs / 1,147 val imgs · 0 errores" },
+      { cls: "t-ok", text: "Dataset validado: 6,065 imgs train / 1,147 imgs val · 0 errores" },
       { cls: "t-cmd", text: "$ yolo segment train model=yolo11n-seg.pt data=data.yaml epochs=50 imgsz=640" },
-      { cls: "", text: "Epoch 1/50   box_loss: 1.980  seg_loss: 2.840  mAP50(M): 0.270" },
-      { cls: "", text: "Epoch 25/50  box_loss: 1.030  seg_loss: 1.120  mAP50(M): 0.700" },
-      { cls: "t-ok", text: "Epoch 46/50  box_loss: 0.820  seg_loss: 0.830  mAP50(M): 0.742  mAP50-95(M): 0.518" },
+      { cls: "", text: "Época 1/50   box_loss: 1.980  seg_loss: 2.840  mAP50(M): 0.270" },
+      { cls: "", text: "Época 25/50  box_loss: 1.030  seg_loss: 1.120  mAP50(M): 0.700" },
+      { cls: "t-ok", text: "Época 46/50  box_loss: 0.820  seg_loss: 0.830  mAP50(M): 0.742  mAP50-95(M): 0.518" },
       { cls: "t-cmd", text: "$ yolo export model=best.pt format=onnx simplify=True" },
-      { cls: "t-ok", text: "Exportado: abyssal_web_bundle.zip (best.pt + metrics + rov_segmented.mp4)" },
+      { cls: "t-ok", text: "Exportado: abyssal_web_bundle.zip (best.pt + métricas + rov_segmented.mp4)" },
     ];
     for (const item of lines) {
       if (token !== termToken || drawerState !== "detail" || activeDetailIdx !== 3) return;
@@ -870,14 +903,14 @@
 
     const series = activeChartMode === "map"
       ? [
-          { key: "map50_mask", label: "mAP@50 Mask", color: "#0077b6" },
-          { key: "map50_95_mask", label: "mAP@50-95 Mask", color: "#00a878" },
-          { key: "map50_95_box", label: "mAP@50-95 Box", color: "#e85d04" },
+          { key: "map50_mask", label: "mAP@50 Máscara", color: "#0077b6" },
+          { key: "map50_95_mask", label: "mAP@50-95 Máscara", color: "#00a878" },
+          { key: "map50_95_box", label: "mAP@50-95 Caja", color: "#e85d04" },
         ]
       : [
-          { key: "train_seg_loss", label: "Train Seg Loss", color: "#0077b6" },
-          { key: "val_seg_loss", label: "Val Seg Loss", color: "#d90429" },
-          { key: "train_box_loss", label: "Train Box Loss", color: "#e85d04" },
+          { key: "train_seg_loss", label: "Pérdida Máscara (Train)", color: "#0077b6" },
+          { key: "val_seg_loss", label: "Pérdida Máscara (Val)", color: "#d90429" },
+          { key: "train_box_loss", label: "Pérdida Caja (Train)", color: "#e85d04" },
         ];
 
     const maxY = activeChartMode === "map"
@@ -914,7 +947,7 @@
       });
       ctx.stroke();
 
-      const lx = padL + sIdx * 168;
+      const lx = padL + sIdx * 172;
       ctx.fillStyle = s.color;
       ctx.fillRect(lx, 6, 12, 4);
       ctx.fillStyle = "#00263e";
@@ -926,7 +959,7 @@
     ctx.fillText(`Época ${maxEp}`, w - padR - 58, h - 8);
   }
 
-  /* ---------- Live ROV Vision Console (Ch 05) ---------- */
+  /* ---------- Consola ROV en Vivo (Capítulo 05) sobre Fotografía Real ---------- */
   function bindLiveVisorControls() {
     $$("#visorModePills [data-mode]", detailLeftPane).forEach((btn) => {
       btn.addEventListener("click", () => {
@@ -1054,12 +1087,12 @@
     const statusBox = $("#telStatusBox", detailEditorialBody);
     const statusEl = $("#telGraspStatus", detailEditorialBody);
     if (!statusBox || !statusEl) return;
-    const isHold = tel.grasp_status === "BIO_EXCLUSION_HOLD";
+    const isHold = tel.grasp_status === "BIO_EXCLUSION_HOLD" || tel.grasp_status === "BLOQUEO BIO-EXCLUSIÓN";
     statusBox.classList.toggle("hold", isHold);
-    statusEl.textContent = tel.grasp_status;
+    statusEl.textContent = isHold ? "BLOQUEO BIO-EXCLUSIÓN" : "AGARRE SEGURO";
     $("#telFps", detailEditorialBody).textContent = Number(tel.fps || 60).toFixed(1);
     $("#telWastePct", detailEditorialBody).textContent = `${Number(tel.avg_bbox_waste_pct || 0).toFixed(1)}%`;
-    $("#telBioDist", detailEditorialBody).textContent = tel.min_bio_distance_px !== null ? `${Number(tel.min_bio_distance_px).toFixed(0)} px` : "CLEAR";
+    $("#telBioDist", detailEditorialBody).textContent = tel.min_bio_distance_px !== null ? `${Number(tel.min_bio_distance_px).toFixed(0)} px` : "DESPEJADO";
     $("#telAreaLat", detailEditorialBody).textContent = `${Number(tel.debris_coverage_pct || 0).toFixed(2)}% · ${Number(tel.inference_ms || 9.4).toFixed(1)} ms`;
     const tgt = tel.primary_target;
     $("#telCentroid", detailEditorialBody).textContent = tgt ? `(${Math.round(tgt.centroid[0])}, ${Math.round(tgt.centroid[1])})` : "--";
@@ -1079,11 +1112,51 @@
     });
   }
 
+  /* Máscaras calibradas sobre las coordenadas reales de media/demo_rov_frame.jpg */
+  const REAL_PHOTO_POLYS = {
+    bottle: {
+      classId: 0,
+      label: "debris_flexible_polymer (botella)",
+      conf: 0.94,
+      norm: [[0.394, 0.296], [0.411, 0.309], [0.404, 0.340], [0.409, 0.376], [0.391, 0.455], [0.369, 0.514], [0.349, 0.526], [0.327, 0.506], [0.327, 0.480], [0.349, 0.402], [0.376, 0.336], [0.388, 0.312]],
+    },
+    bag: {
+      classId: 0,
+      label: "debris_flexible_polymer (bolsa)",
+      conf: 0.91,
+      norm: [[0.354, 0.616], [0.368, 0.608], [0.383, 0.630], [0.404, 0.668], [0.414, 0.720], [0.414, 0.805], [0.372, 0.836], [0.338, 0.880], [0.320, 0.880], [0.296, 0.818], [0.283, 0.735], [0.284, 0.688], [0.312, 0.678], [0.342, 0.658]],
+    },
+    can: {
+      classId: 1,
+      label: "debris_rigid_other (lata)",
+      conf: 0.88,
+      norm: [[0.642, 0.806], [0.682, 0.814], [0.715, 0.892], [0.713, 0.946], [0.682, 0.962], [0.654, 0.944], [0.631, 0.865], [0.632, 0.822]],
+    },
+    coral: {
+      classId: 2,
+      label: "protected_marine_life (coral)",
+      conf: 0.93,
+      norm: [[0.613, 0.380], [0.634, 0.315], [0.682, 0.295], [0.735, 0.308], [0.768, 0.365], [0.764, 0.438], [0.732, 0.478], [0.695, 0.502], [0.655, 0.495], [0.625, 0.448]],
+    },
+    fishStatic: {
+      classId: 2,
+      label: "protected_marine_life (pez)",
+      conf: 0.96,
+      norm: [[0.726, 0.432], [0.745, 0.412], [0.766, 0.416], [0.782, 0.435], [0.774, 0.456], [0.752, 0.460], [0.732, 0.450]],
+    },
+  };
+
   function startVisorLoop() {
     const canvas = $("#rovSimCanvas", detailLeftPane);
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
     const classHex = { 0: "#90e0ef", 1: "#ffb703", 2: "#00e5a0", 3: "#8b5cf6" };
+    const marineSnow = Array.from({ length: 40 }, () => ({
+      x: Math.random(),
+      y: Math.random(),
+      r: 0.8 + Math.random() * 1.4,
+      vy: 0.0005 + Math.random() * 0.001,
+    }));
 
     function frame() {
       if (drawerState !== "detail" || activeDetailIdx !== 4) return;
@@ -1098,59 +1171,84 @@
       }
 
       if (visorPlaying) simTick += 1;
-      const t = simTick * 0.032;
+      const t = simTick * 0.028;
       const w = canvas.width;
       const h = canvas.height;
-      const grad = ctx.createLinearGradient(0, 0, 0, h);
-      grad.addColorStop(0, "#082947");
-      grad.addColorStop(0.6, "#041629");
-      grad.addColorStop(1, "#020b15");
-      ctx.fillStyle = grad;
-      ctx.fillRect(0, 0, w, h);
 
-      for (let b = 0; b < 3; b++) {
-        const shift = Math.sin(t * 0.7 + b) * 28;
-        ctx.fillStyle = "rgba(144, 224, 239, 0.05)";
-        ctx.beginPath();
-        ctx.moveTo(140 + b * 210 + shift, 0);
-        ctx.lineTo(220 + b * 210 + shift, 0);
-        ctx.lineTo(310 + b * 210 + shift, h);
-        ctx.lineTo(90 + b * 210 + shift, h);
-        ctx.closePath();
-        ctx.fill();
+      /* Deriva orgánica suave de cámara ROV sobre la fotografía submarina real */
+      const panX = Math.sin(t * 0.55) * 9;
+      const panY = Math.cos(t * 0.42) * 6;
+      const scale = 1.04;
+      const drawW = w * scale;
+      const drawH = h * scale;
+      const ox = (w - drawW) * 0.5 + panX;
+      const oy = (h - drawH) * 0.5 + panY;
+
+      if (demoFrameImg.complete && demoFrameImg.naturalWidth > 0) {
+        ctx.drawImage(demoFrameImg, ox, oy, drawW, drawH);
+      } else {
+        ctx.fillStyle = "#031626";
+        ctx.fillRect(0, 0, w, h);
       }
 
-      const bob = Math.sin(t) * 14;
-      const bottlePoly = [[250, 165 + bob], [292, 145 + bob], [395, 215 + bob], [418, 248 + bob], [378, 275 + bob], [268, 202 + bob]];
-      const netPoly = [[155, 280 - bob * 0.5], [215, 264 - bob * 0.5], [252, 308 - bob * 0.5], [218, 352 - bob * 0.5], [148, 330 - bob * 0.5]];
-      const rigidPoly = [[560, 366], [620, 360], [632, 396], [556, 398]];
-      const coralPoly = [[485, 415], [498, 342], [525, 328], [548, 355], [562, 415]];
-      const fishX = 70 + ((t * 0.24) % 1) * (w - 140);
-      const fishY = 215 + Math.sin(t * 1.9) * 18;
-      const fishPoly = [[fishX - 36, fishY - 14], [fishX - 15, fishY - 2], [fishX + 18, fishY - 18], [fishX + 42, fishY], [fishX + 18, fishY + 18], [fishX - 15, fishY + 2], [fishX - 36, fishY + 14]];
+      /* Partículas de nieve marina */
+      ctx.fillStyle = "rgba(210, 240, 255, 0.36)";
+      marineSnow.forEach((p) => {
+        if (visorPlaying) {
+          p.y -= p.vy;
+          if (p.y < 0) p.y = 1;
+        }
+        ctx.beginPath();
+        ctx.arc(p.x * w, p.y * h, p.r, 0, Math.PI * 2);
+        ctx.fill();
+      });
 
-      const objects = [
-        { poly: bottlePoly, classId: 0, fill: "rgba(195,222,235,0.68)", stroke: "#d9eef8" },
-        { poly: netPoly, classId: 0, fill: "rgba(162,190,204,0.55)", stroke: "#b7d3e0" },
-        { poly: rigidPoly, classId: 1, fill: "rgba(110,126,144,0.85)", stroke: "#98adc4" },
-        { poly: coralPoly, classId: 2, fill: "rgba(26,105,92,0.9)", stroke: "#289c88" },
-        { poly: fishPoly, classId: 2, fill: "rgba(68,176,214,0.92)", stroke: "#9ce6ff" },
+      const toPx = (normPts) => normPts.map(([nx, ny]) => [ox + nx * drawW, oy + ny * drawH]);
+      const bottlePoly = toPx(REAL_PHOTO_POLYS.bottle.norm);
+      const bagPoly = toPx(REAL_PHOTO_POLYS.bag.norm);
+      const canPoly = toPx(REAL_PHOTO_POLYS.can.norm);
+      const coralPoly = toPx(REAL_PHOTO_POLYS.coral.norm);
+      const fishPoly = toPx(REAL_PHOTO_POLYS.fishStatic.norm);
+
+      /* Pez dinámico nadando suavemente frente al coral hacia la botella para demostrar bloqueo de bio-exclusión */
+      const swimPhase = 0.5 + 0.5 * Math.sin(t * 0.72);
+      const swimX = ox + (0.28 + swimPhase * 0.44) * drawW;
+      const swimY = oy + (0.41 + Math.sin(t * 1.4) * 0.03) * drawH;
+      const swimPoly = [
+        [swimX - 18, swimY - 6],
+        [swimX - 5, swimY - 9],
+        [swimX + 12, swimY - 3],
+        [swimX + 20, swimY - 8],
+        [swimX + 20, swimY + 8],
+        [swimX + 12, swimY + 3],
+        [swimX - 5, swimY + 9],
+        [swimX - 18, swimY + 6],
       ];
 
-      for (const obj of objects) {
-        ctx.beginPath();
-        obj.poly.forEach(([x, y], i) => (i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y)));
-        ctx.closePath();
-        ctx.fillStyle = obj.fill;
-        ctx.fill();
-        ctx.strokeStyle = obj.stroke;
-        ctx.lineWidth = 1.5;
-        ctx.stroke();
-      }
+      ctx.save();
+      ctx.beginPath();
+      swimPoly.forEach(([x, y], i) => (i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y)));
+      ctx.closePath();
+      ctx.fillStyle = "rgba(24, 90, 122, 0.78)";
+      ctx.fill();
+      ctx.restore();
 
-      const debrisArea = polyArea(bottlePoly) + polyArea(netPoly) + polyArea(rigidPoly);
-      const minBioDist = Math.min(minDistPts(fishPoly, bottlePoly), minDistPts(coralPoly, bottlePoly));
-      const graspStatus = minBioDist < 58 ? "BIO_EXCLUSION_HOLD" : "SAFE_GRASP";
+      const objects = [
+        { poly: bottlePoly, classId: 0 },
+        { poly: bagPoly, classId: 0 },
+        { poly: canPoly, classId: 1 },
+        { poly: coralPoly, classId: 2 },
+        { poly: fishPoly, classId: 2 },
+        { poly: swimPoly, classId: 2 },
+      ];
+
+      const debrisArea = polyArea(bottlePoly) + polyArea(bagPoly) + polyArea(canPoly);
+      const minBioDist = Math.min(
+        minDistPts(swimPoly, bottlePoly),
+        minDistPts(coralPoly, bottlePoly),
+        minDistPts(fishPoly, canPoly)
+      );
+      const isHold = minBioDist < 45;
       const bottleCenter = polyCenter(bottlePoly);
 
       if (visorMode !== "raw") {
@@ -1160,38 +1258,51 @@
           ctx.rect(w * 0.5, 0, w * 0.5, h);
           ctx.clip();
         }
+
         for (const obj of objects) {
           const hex = classHex[obj.classId];
           ctx.beginPath();
           obj.poly.forEach(([x, y], i) => (i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y)));
           ctx.closePath();
-          ctx.fillStyle = `${hex}44`;
+          ctx.fillStyle = `${hex}38`;
           ctx.fill();
           ctx.strokeStyle = hex;
-          ctx.lineWidth = 2.4;
+          ctx.lineWidth = 2.2;
           ctx.stroke();
+
           if (visorMode === "hud" && obj.classId === 2) {
             const [cx, cy] = polyCenter(obj.poly);
             ctx.beginPath();
             ctx.setLineDash([5, 4]);
-            ctx.arc(cx, cy, 48, 0, Math.PI * 2);
+            ctx.arc(cx, cy, obj.poly === coralPoly ? 68 : 34, 0, Math.PI * 2);
             ctx.strokeStyle = "rgba(0, 229, 160, 0.78)";
-            ctx.lineWidth = 1.5;
+            ctx.lineWidth = 1.4;
             ctx.stroke();
             ctx.setLineDash([]);
           }
         }
+
         if (visorMode === "hud") {
+          /* Haz suave de escaneo horizontal */
+          const scanY = ((t * 58) % (h - 30)) + 15;
+          const scanGrad = ctx.createLinearGradient(0, scanY - 12, 0, scanY + 12);
+          scanGrad.addColorStop(0, "rgba(144,224,239,0)");
+          scanGrad.addColorStop(0.5, "rgba(144,224,239,0.18)");
+          scanGrad.addColorStop(1, "rgba(144,224,239,0)");
+          ctx.fillStyle = scanGrad;
+          ctx.fillRect(0, scanY - 12, w, 24);
+
           const [tx, ty] = bottleCenter;
-          ctx.strokeStyle = graspStatus === "BIO_EXCLUSION_HOLD" ? "#ff4769" : "#90e0ef";
-          ctx.lineWidth = 2;
+          ctx.strokeStyle = isHold ? "#ff4769" : "#90e0ef";
+          ctx.lineWidth = 2.2;
           ctx.beginPath();
-          ctx.arc(tx, ty, 18, 0, Math.PI * 2);
-          ctx.moveTo(tx - 26, ty); ctx.lineTo(tx + 26, ty);
-          ctx.moveTo(tx, ty - 26); ctx.lineTo(tx, ty + 26);
+          ctx.arc(tx, ty, 19, 0, Math.PI * 2);
+          ctx.moveTo(tx - 28, ty); ctx.lineTo(tx + 28, ty);
+          ctx.moveTo(tx, ty - 28); ctx.lineTo(tx, ty + 28);
           ctx.stroke();
         }
         ctx.restore();
+
         if (visorMode === "split") {
           ctx.strokeStyle = "#90e0ef";
           ctx.lineWidth = 2;
@@ -1207,16 +1318,16 @@
           fps: 60.0,
           inference_ms: 9.4,
           debris_coverage_pct: (debrisArea / (w * h)) * 100,
-          avg_bbox_waste_pct: 59.2,
+          avg_bbox_waste_pct: 58.6,
           min_bio_distance_px: minBioDist,
-          grasp_status: graspStatus,
+          grasp_status: isHold ? "BIO_EXCLUSION_HOLD" : "SAFE_GRASP",
           primary_target: { centroid: bottleCenter },
           instances: [
-            { class_id: 0, class_name: "debris_flexible_polymer (bottle)", confidence: 0.94 },
-            { class_id: 0, class_name: "debris_flexible_polymer (net)", confidence: 0.89 },
-            { class_id: 1, class_name: "debris_rigid_other (can)", confidence: 0.87 },
-            { class_id: 2, class_name: "protected_marine_life (fish)", confidence: 0.96 },
-            { class_id: 2, class_name: "protected_marine_life (coral)", confidence: 0.92 },
+            { class_id: 0, class_name: REAL_PHOTO_POLYS.bottle.label, confidence: 0.94 },
+            { class_id: 0, class_name: REAL_PHOTO_POLYS.bag.label, confidence: 0.91 },
+            { class_id: 1, class_name: REAL_PHOTO_POLYS.can.label, confidence: 0.88 },
+            { class_id: 2, class_name: REAL_PHOTO_POLYS.coral.label, confidence: 0.93 },
+            { class_id: 2, class_name: REAL_PHOTO_POLYS.fishStatic.label, confidence: 0.96 },
           ],
         });
       }
@@ -1226,7 +1337,7 @@
     frame();
   }
 
-  /* ---------- Motor 3D Three.js WebGL (Globo Terra + Océano con Sun-Glint + Buque + Islas) ---------- */
+  /* ---------- Motor 3D Three.js Temático por Diapositiva ---------- */
   function buildProceduralEarthCanvas() {
     const c = document.createElement("canvas");
     c.width = 1024;
@@ -1268,34 +1379,17 @@
     return c;
   }
 
-  function buildWakeCanvasTexture() {
+  function buildCircleSpriteTexture() {
     const c = document.createElement("canvas");
-    c.width = 256;
-    c.height = 512;
+    c.width = 64;
+    c.height = 64;
     const g = c.getContext("2d");
-    g.clearRect(0, 0, 256, 512);
-    const grad = g.createLinearGradient(0, 0, 0, 512);
-    grad.addColorStop(0.0, "rgba(230, 248, 255, 0.72)");
-    grad.addColorStop(0.35, "rgba(180, 232, 250, 0.36)");
-    grad.addColorStop(1.0, "rgba(144, 224, 239, 0.0)");
-    g.fillStyle = grad;
-    g.beginPath();
-    g.moveTo(116, 0);
-    g.lineTo(140, 0);
-    g.lineTo(246, 512);
-    g.lineTo(10, 512);
-    g.closePath();
-    g.fill();
-    for (let i = 0; i < 160; i++) {
-      const t = Math.random();
-      const spread = 12 + t * 105;
-      const x = 128 + (Math.random() - 0.5) * 2 * spread;
-      const y = t * 490;
-      g.fillStyle = `rgba(255, 255, 255, ${(1 - t) * 0.42})`;
-      g.beginPath();
-      g.arc(x, y, 1.5 + Math.random() * 5, 0, Math.PI * 2);
-      g.fill();
-    }
+    const rad = g.createRadialGradient(32, 32, 2, 32, 32, 30);
+    rad.addColorStop(0, "rgba(255,255,255,1)");
+    rad.addColorStop(0.45, "rgba(144,224,239,0.55)");
+    rad.addColorStop(1, "rgba(144,224,239,0)");
+    g.fillStyle = rad;
+    g.fillRect(0, 0, 64, 64);
     return c;
   }
 
@@ -1308,7 +1402,7 @@
 
     let renderer;
     try {
-      renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false, powerPreference: "high-performance" });
+      renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: "high-performance" });
     } catch (_) {
       initFallback2D();
       return;
@@ -1316,32 +1410,24 @@
 
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setClearColor(0x000d15, 1);
+    renderer.setClearColor(0x000d15, 0);
 
     const scene = new THREE.Scene();
-    scene.fog = new THREE.FogExp2(0x000d15, 0.012);
-
-    const camera = new THREE.PerspectiveCamera(42, window.innerWidth / window.innerHeight, 0.1, 220);
+    const camera = new THREE.PerspectiveCamera(42, window.innerWidth / window.innerHeight, 0.1, 180);
     camera.position.set(0, 0, 6.85);
 
-    const hemiLight = new THREE.HemisphereLight(0xbbeeff, 0x05182e, 1.35);
-    scene.add(hemiLight);
+    scene.add(new THREE.HemisphereLight(0xbbeeff, 0x05182e, 1.35));
     const sunLight = new THREE.DirectionalLight(0xeef8ff, 2.35);
     sunLight.position.set(12, 16, 14);
     scene.add(sunLight);
 
-    /* ----- ESCENA 1: GLOBO TERRAQUEO 3D + ATMÓSFERA FRESNEL + BALIZAS ----- */
+    /* ----- 1. GLOBO TERRÁQUEO 3D (Inicio & Cierre) ----- */
     const globeGroup = new THREE.Group();
     scene.add(globeGroup);
 
     const fallbackTex = new THREE.CanvasTexture(buildProceduralEarthCanvas());
-    const earthMat = new THREE.MeshStandardMaterial({
-      map: fallbackTex,
-      roughness: 0.72,
-      metalness: 0.12,
-    });
-    const loader = new THREE.TextureLoader();
-    loader.load("media/earth_albedo.jpg", (tex) => {
+    const earthMat = new THREE.MeshStandardMaterial({ map: fallbackTex, roughness: 0.72, metalness: 0.12 });
+    new THREE.TextureLoader().load("media/earth_albedo.jpg", (tex) => {
       tex.colorSpace = THREE.SRGBColorSpace;
       earthMat.map = tex;
       earthMat.needsUpdate = true;
@@ -1350,10 +1436,9 @@
     const earthMesh = new THREE.Mesh(new THREE.SphereGeometry(2.35, 64, 64), earthMat);
     globeGroup.add(earthMesh);
 
-    const cloudTex = new THREE.CanvasTexture(buildCloudCanvasTexture());
     const cloudMesh = new THREE.Mesh(
       new THREE.SphereGeometry(2.39, 48, 48),
-      new THREE.MeshBasicMaterial({ map: cloudTex, transparent: true, opacity: 0.45, depthWrite: false })
+      new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(buildCloudCanvasTexture()), transparent: true, opacity: 0.45, depthWrite: false })
     );
     globeGroup.add(cloudMesh);
 
@@ -1390,194 +1475,170 @@
     for (let i = 0; i < 8; i++) {
       const phi = (0.35 + (i % 4) * 0.24) * Math.PI;
       const theta = (0.4 + i * 0.58) * Math.PI;
-      const dir = new THREE.Vector3(
-        Math.sin(phi) * Math.cos(theta),
-        Math.cos(phi),
-        Math.sin(phi) * Math.sin(theta)
-      );
+      const dir = new THREE.Vector3(Math.sin(phi) * Math.cos(theta), Math.cos(phi), Math.sin(phi) * Math.sin(theta));
       const beam = new THREE.Mesh(new THREE.CylinderGeometry(0.006, 0.014, 0.52, 8), beaconMat);
       beam.position.copy(dir.clone().multiplyScalar(2.55));
       beam.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir);
       globeGroup.add(beam);
     }
 
-    /* ----- ESCENA 2: OCÉANO ANIMADO SUN-GLINT + BUQUE DE INVESTIGACIÓN + ISLAS ----- */
-    const oceanGroup = new THREE.Group();
-    scene.add(oceanGroup);
+    /* ----- 2. RED NEURONAL & PIRÁMIDE DE TENSORES 3D (Capítulo 03: Arquitectura YOLO11-seg) ----- */
+    const neuralGroup = new THREE.Group();
+    scene.add(neuralGroup);
 
-    const oceanUniforms = {
-      uTime: { value: 0 },
-      uSunDir: { value: new THREE.Vector3(0.25, 0.72, 0.65).normalize() },
-      uDeepColor: { value: new THREE.Color(0x001324) },
-      uMidColor: { value: new THREE.Color(0x043256) },
+    const layerSpecs = [
+      { pos: [-4.6, 0.2, 0.0], size: [1.8, 2.2], color: 0x90e0ef },
+      { pos: [-2.6, 0.2, -0.3], size: [1.5, 1.85], color: 0x90e0ef },
+      { pos: [-0.8, 0.2, -0.1], size: [1.2, 1.5], color: 0x90e0ef },
+      { pos: [1.0, 0.2, 0.1], size: [1.0, 1.25], color: 0x90e0ef },
+      { pos: [2.8, 1.25, 0.2], size: [1.1, 0.95], color: 0xff7438 },
+      { pos: [2.8, -0.95, 0.2], size: [1.25, 1.05], color: 0x00e5a0 },
+      { pos: [4.7, 0.2, 0.4], size: [1.5, 1.75], color: 0x90e0ef },
+    ];
+
+    const layerAnchors = [];
+    layerSpecs.forEach(({ pos, size, color }) => {
+      const planeGeo = new THREE.PlaneGeometry(size[0], size[1], 4, 4);
+      const card = new THREE.Mesh(
+        planeGeo,
+        new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.14, side: THREE.DoubleSide })
+      );
+      card.position.set(pos[0], pos[1], pos[2]);
+      card.rotation.y = -0.36;
+      const wire = new THREE.LineSegments(
+        new THREE.EdgesGeometry(planeGeo),
+        new THREE.LineBasicMaterial({ color, transparent: true, opacity: 0.72 })
+      );
+      card.add(wire);
+      neuralGroup.add(card);
+      layerAnchors.push(new THREE.Vector3(pos[0], pos[1], pos[2]));
+    });
+
+    const neuralLinks = [
+      [0, 1, 0x90e0ef], [1, 2, 0x90e0ef], [2, 3, 0x90e0ef],
+      [3, 4, 0xff7438], [4, 6, 0xff7438],
+      [3, 5, 0x00e5a0], [5, 6, 0x00e5a0],
+    ];
+    const neuralPulses = [];
+    neuralLinks.forEach(([a, b, col]) => {
+      const pts = [layerAnchors[a], layerAnchors[b]];
+      const line = new THREE.Line(
+        new THREE.BufferGeometry().setFromPoints(pts),
+        new THREE.LineBasicMaterial({ color: col, transparent: true, opacity: 0.42 })
+      );
+      neuralGroup.add(line);
+      const photon = new THREE.Mesh(new THREE.SphereGeometry(0.065, 12, 12), new THREE.MeshBasicMaterial({ color: col }));
+      neuralGroup.add(photon);
+      neuralPulses.push({ a: layerAnchors[a], b: layerAnchors[b], mesh: photon, offset: Math.random() });
+    });
+
+    /* ----- 3. PAISAJE DE DESCENSO DE GRADIENTE 3D (Capítulo 04: Entrenamiento y Loss) ----- */
+    const lossGroup = new THREE.Group();
+    scene.add(lossGroup);
+
+    const lossHeight = (x, z) => {
+      const r2 = (x * x + z * z) * 0.085;
+      return -2.2 * Math.exp(-r2) + 0.48 * Math.sin(x * 0.75) * Math.cos(z * 0.75) + 0.18 * Math.cos(x * 1.4 - z);
     };
 
-    const oceanShaderMat = new THREE.ShaderMaterial({
-      uniforms: oceanUniforms,
-      vertexShader: `
-        uniform float uTime;
-        varying vec2 vUv;
-        varying vec3 vWorldPos;
-        void main() {
-          vUv = uv;
-          vec3 pos = position;
-          float w1 = sin(pos.x * 0.45 + uTime * 1.1) * 0.16;
-          float w2 = cos(pos.y * 0.38 - uTime * 0.9) * 0.14;
-          pos.z += w1 + w2;
-          vec4 wp = modelMatrix * vec4(pos, 1.0);
-          vWorldPos = wp.xyz;
-          gl_Position = projectionMatrix * viewMatrix * wp;
-        }
-      `,
-      fragmentShader: `
-        uniform float uTime;
-        uniform vec3 uSunDir;
-        uniform vec3 uDeepColor;
-        uniform vec3 uMidColor;
-        varying vec2 vUv;
-        varying vec3 vWorldPos;
-
-        float hash(vec2 p) {
-          return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453123);
-        }
-        float noise(vec2 p) {
-          vec2 i = floor(p);
-          vec2 f = fract(p);
-          f = f * f * (3.0 - 2.0 * f);
-          return mix(
-            mix(hash(i), hash(i + vec2(1.0, 0.0)), f.x),
-            mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), f.x),
-            f.y
-          );
-        }
-        void main() {
-          vec2 p = vWorldPos.xz * 1.15;
-          float n1 = noise(p * 0.6 + vec2(uTime * 0.2, uTime * 0.15));
-          float n2 = noise(p * 1.8 - vec2(uTime * 0.28, -uTime * 0.18));
-          float n3 = noise(p * 5.2 + vec2(-uTime * 0.35, uTime * 0.45));
-          float dx = (noise(p * 3.8 + vec2(0.08, uTime * 0.22)) - noise(p * 3.8 - vec2(0.08, -uTime * 0.22))) * 3.1;
-          float dz = (noise(p * 3.8 + vec2(uTime * 0.22, 0.08)) - noise(p * 3.8 - vec2(-uTime * 0.22, 0.08))) * 3.1;
-          vec3 N = normalize(vec3(dx, 1.0, dz));
-          vec3 V = normalize(cameraPosition - vWorldPos);
-          vec3 H = normalize(uSunDir + V);
-          float spec = pow(max(dot(N, H), 0.0), 145.0) * 2.8;
-          float sparkle = smoothstep(0.62, 0.94, n3) * pow(max(dot(N, H), 0.0), 34.0) * 1.5;
-          vec3 base = mix(uDeepColor, uMidColor, n1 * 0.65 + n2 * 0.35);
-          vec3 col = base + vec3(0.85, 0.96, 1.0) * (spec + sparkle);
-          gl_FragColor = vec4(col, 1.0);
-        }
-      `,
-    });
-
-    const oceanPlane = new THREE.Mesh(new THREE.PlaneGeometry(140, 140, 110, 110), oceanShaderMat);
-    oceanPlane.rotation.x = -Math.PI / 2;
-    oceanGroup.add(oceanPlane);
-
-    /* Buque de investigación OceanXplorer / Abyssal */
-    const vesselGroup = new THREE.Group();
-    const hullMat = new THREE.MeshStandardMaterial({ color: 0x0e253b, roughness: 0.45, metalness: 0.3 });
-    const whiteMat = new THREE.MeshStandardMaterial({ color: 0xeaf4fa, roughness: 0.4, metalness: 0.15 });
-    const deckMat = new THREE.MeshStandardMaterial({ color: 0x1c3a54, roughness: 0.6 });
-    const heliMat = new THREE.MeshBasicMaterial({ color: 0xffb703 });
-
-    const hull = new THREE.Mesh(new THREE.BoxGeometry(0.95, 0.32, 3.2), hullMat);
-    hull.position.y = 0.08;
-    vesselGroup.add(hull);
-
-    const bow = new THREE.Mesh(new THREE.ConeGeometry(0.48, 0.95, 4), hullMat);
-    bow.rotation.x = -Math.PI / 2;
-    bow.rotation.y = Math.PI / 4;
-    bow.position.set(0, 0.1, -2.0);
-    vesselGroup.add(bow);
-
-    const deck = new THREE.Mesh(new THREE.BoxGeometry(0.86, 0.08, 2.85), deckMat);
-    deck.position.set(0, 0.26, -0.1);
-    vesselGroup.add(deck);
-
-    const heliRing = new THREE.Mesh(new THREE.RingGeometry(0.22, 0.28, 24), heliMat);
-    heliRing.rotation.x = -Math.PI / 2;
-    heliRing.position.set(0, 0.31, -1.05);
-    vesselGroup.add(heliRing);
-
-    const bridge = new THREE.Mesh(new THREE.BoxGeometry(0.76, 0.42, 1.05), whiteMat);
-    bridge.position.set(0, 0.5, -0.15);
-    vesselGroup.add(bridge);
-
-    const mast = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.05, 0.55, 8), whiteMat);
-    mast.position.set(0, 0.92, -0.15);
-    vesselGroup.add(mast);
-
-    const craneLeft = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.45, 0.08), whiteMat);
-    craneLeft.position.set(-0.34, 0.48, 1.32);
-    craneLeft.rotation.x = 0.32;
-    vesselGroup.add(craneLeft);
-
-    const craneRight = craneLeft.clone();
-    craneRight.position.x = 0.34;
-    vesselGroup.add(craneRight);
-
-    const wakeTex = new THREE.CanvasTexture(buildWakeCanvasTexture());
-    const wakeMat = new THREE.MeshBasicMaterial({ map: wakeTex, transparent: true, opacity: 0.72, depthWrite: false, side: THREE.DoubleSide });
-    const wakeMesh = new THREE.Mesh(new THREE.PlaneGeometry(2.6, 6.2), wakeMat);
-    wakeMesh.rotation.x = -Math.PI / 2;
-    wakeMesh.position.set(0, 0.06, 4.4);
-    vesselGroup.add(wakeMesh);
-
-    oceanGroup.add(vesselGroup);
-
-    /* Islas rocosas multi-cumbre y espuma costera */
-    const rockMat = new THREE.MeshStandardMaterial({ color: 0x363e42, roughness: 0.94, flatShading: true });
-    const mossMat = new THREE.MeshStandardMaterial({ color: 0x2c4236, roughness: 0.92, flatShading: true });
-    const foamMat = new THREE.MeshBasicMaterial({ color: 0xdff6ff, transparent: true, opacity: 0.28, side: THREE.DoubleSide });
-    const islandSpecs = [
-      [-6.5, -6, 1.8],
-      [7.2, -16, 2.2],
-      [-5.8, -26, 1.9],
-      [6.4, -36, 2.3],
-    ];
-    const foamRings = [];
-    islandSpecs.forEach(([ix, iz, sc]) => {
-      const cluster = new THREE.Group();
-      cluster.position.set(ix, -0.2, iz);
-      [
-        [0, 0, sc, 1.5, 0.48, 1.15, rockMat],
-        [sc * 0.6, sc * 0.2, sc * 0.72, 1.2, 0.45, 0.9, mossMat],
-        [-sc * 0.55, -sc * 0.1, sc * 0.65, 1.1, 0.52, 1.0, rockMat],
-      ].forEach(([ox, oz, r, sx, sy, sz, mat]) => {
-        const rock = new THREE.Mesh(new THREE.DodecahedronGeometry(r, 1), mat);
-        rock.scale.set(sx, sy, sz);
-        rock.position.set(ox, 0, oz);
-        cluster.add(rock);
-      });
-      oceanGroup.add(cluster);
-
-      const foam = new THREE.Mesh(new THREE.RingGeometry(sc * 1.28, sc * 1.5, 40), foamMat);
-      foam.rotation.x = -Math.PI / 2;
-      foam.position.set(ix, 0.05, iz);
-      oceanGroup.add(foam);
-      foamRings.push(foam);
-    });
-
-    /* Gaviotas 3D con alas en V */
-    const gullMat = new THREE.MeshBasicMaterial({ color: 0xf4fbff, side: THREE.DoubleSide });
-    const gulls = [];
-    for (let i = 0; i < 6; i++) {
-      const gull = new THREE.Group();
-      const wingL = new THREE.Mesh(new THREE.PlaneGeometry(0.16, 0.045), gullMat);
-      wingL.rotation.x = -Math.PI / 2;
-      wingL.rotation.z = 0.28;
-      wingL.position.x = -0.07;
-      const wingR = new THREE.Mesh(new THREE.PlaneGeometry(0.16, 0.045), gullMat);
-      wingR.rotation.x = -Math.PI / 2;
-      wingR.rotation.z = -0.28;
-      wingR.position.x = 0.07;
-      gull.add(wingL, wingR);
-      gull.position.set((i - 2.5) * 1.1, 3.0 + (i % 2) * 0.4, -4 - i * 2);
-      oceanGroup.add(gull);
-      gulls.push({ mesh: gull, wingL, wingR, phase: i * 1.1 });
+    const lossGeo = new THREE.PlaneGeometry(20, 20, 64, 64);
+    lossGeo.rotateX(-Math.PI / 2);
+    const posAttr = lossGeo.attributes.position;
+    for (let i = 0; i < posAttr.count; i++) {
+      const x = posAttr.getX(i);
+      const z = posAttr.getZ(i);
+      posAttr.setY(i, lossHeight(x, z));
     }
+    lossGeo.computeVertexNormals();
 
-    /* Loop de renderizado */
+    const lossWire = new THREE.Mesh(
+      lossGeo,
+      new THREE.MeshBasicMaterial({ color: 0x90e0ef, wireframe: true, transparent: true, opacity: 0.28 })
+    );
+    lossGroup.add(lossWire);
+
+    const lossSurface = new THREE.Mesh(
+      lossGeo,
+      new THREE.MeshStandardMaterial({ color: 0x04263f, roughness: 0.65, metalness: 0.25, transparent: true, opacity: 0.78 })
+    );
+    lossGroup.add(lossSurface);
+
+    const descentPts = [];
+    for (let i = 0; i <= 40; i++) {
+      const s = i / 40;
+      const ang = (1 - s) * 3.8;
+      const rad = (1 - s) * 5.2;
+      const x = Math.cos(ang) * rad;
+      const z = Math.sin(ang) * rad;
+      descentPts.push(new THREE.Vector3(x, lossHeight(x, z) + 0.1, z));
+    }
+    const descentCurve = new THREE.CatmullRomCurve3(descentPts);
+    const descentTube = new THREE.Mesh(
+      new THREE.TubeGeometry(descentCurve, 64, 0.045, 8, false),
+      new THREE.MeshBasicMaterial({ color: 0xff7438 })
+    );
+    lossGroup.add(descentTube);
+
+    const optimizerBall = new THREE.Mesh(
+      new THREE.SphereGeometry(0.18, 20, 20),
+      new THREE.MeshBasicMaterial({ color: 0xff7438 })
+    );
+    lossGroup.add(optimizerBall);
+
+    /* ----- 4. PARTÍCULAS SUBMARINAS, ESCÁNER & ANILLOS DE SONAR (Capítulos sobre fotografía) ----- */
+    const fxGroup = new THREE.Group();
+    scene.add(fxGroup);
+
+    const snowCount = 190;
+    const snowPositions = new Float32Array(snowCount * 3);
+    for (let i = 0; i < snowCount; i++) {
+      snowPositions[i * 3] = (Math.random() - 0.5) * 18;
+      snowPositions[i * 3 + 1] = (Math.random() - 0.5) * 11;
+      snowPositions[i * 3 + 2] = (Math.random() - 0.5) * 8;
+    }
+    const snowGeo = new THREE.BufferGeometry();
+    snowGeo.setAttribute("position", new THREE.BufferAttribute(snowPositions, 3));
+    const snowPoints = new THREE.Points(
+      snowGeo,
+      new THREE.PointsMaterial({
+        map: new THREE.CanvasTexture(buildCircleSpriteTexture()),
+        size: 0.14,
+        transparent: true,
+        opacity: 0.65,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending,
+      })
+    );
+    fxGroup.add(snowPoints);
+
+    const sonarSweep = new THREE.Mesh(
+      new THREE.PlaneGeometry(18, 0.045),
+      new THREE.MeshBasicMaterial({ color: 0x90e0ef, transparent: true, opacity: 0.45, blending: THREE.AdditiveBlending })
+    );
+    fxGroup.add(sonarSweep);
+
+    const polyRingsGroup = new THREE.Group();
+    for (let i = 0; i < 4; i++) {
+      const ring = new THREE.Mesh(
+        new THREE.RingGeometry(0.75 + i * 0.45, 0.78 + i * 0.45, i % 2 === 0 ? 6 : 4),
+        new THREE.MeshBasicMaterial({ color: i === 2 ? 0x00e5a0 : 0x90e0ef, transparent: true, opacity: 0.35, side: THREE.DoubleSide })
+      );
+      ring.position.set(1.5 + (i - 1.5) * 0.6, (i % 2 - 0.5) * 0.9, -i * 0.4);
+      polyRingsGroup.add(ring);
+    }
+    fxGroup.add(polyRingsGroup);
+
+    const sonarPulseGroup = new THREE.Group();
+    for (let i = 0; i < 4; i++) {
+      const sr = new THREE.Mesh(
+        new THREE.RingGeometry(1.1, 1.15, 64),
+        new THREE.MeshBasicMaterial({ color: 0x90e0ef, transparent: true, opacity: 0.38, side: THREE.DoubleSide })
+      );
+      sonarPulseGroup.add(sr);
+    }
+    fxGroup.add(sonarPulseGroup);
+
+    /* ----- Loop Principal ----- */
     const clock = new THREE.Clock();
     function animate() {
       const t = clock.getElapsedTime();
@@ -1586,46 +1647,70 @@
       animateWaveIcon(t * 1000);
 
       const showGlobe = smoothProgress < 0.085 || smoothProgress > 0.905;
-      globeGroup.visible = showGlobe;
-      oceanGroup.visible = !showGlobe;
+      const ch = CHAPTERS[currentChapterIdx] || CHAPTERS[0];
+      const sceneType = showGlobe ? "globe" : ch.sceneType;
 
-      if (showGlobe) {
+      globeGroup.visible = sceneType === "globe";
+      neuralGroup.visible = sceneType === "neural_3d";
+      lossGroup.visible = sceneType === "loss_3d";
+      fxGroup.visible = !globeGroup.visible && !neuralGroup.visible && !lossGroup.visible;
+
+      if (globeGroup.visible) {
         earthMesh.rotation.y = t * 0.055 + smoothProgress * 2.2;
         cloudMesh.rotation.y = t * 0.072;
         globeGroup.rotation.x = 0.22 + mouse.ny * 0.08;
         globeGroup.rotation.y = -0.75 + mouse.nx * 0.12;
         const zoom = smoothProgress < 0.085
-          ? 6.85 - (smoothProgress / 0.085) * 3.35
-          : 6.85 - ((1 - smoothProgress) / 0.095) * 3.25;
+          ? 6.85 - (smoothProgress / 0.085) * 3.1
+          : 6.85 - ((1 - smoothProgress) / 0.095) * 3.0;
         camera.position.set(mouse.nx * 0.32, -mouse.ny * 0.22, zoom);
         camera.lookAt(0, 0, 0);
+      } else if (neuralGroup.visible) {
+        neuralGroup.rotation.y = -0.12 + mouse.nx * 0.16 + Math.sin(t * 0.4) * 0.05;
+        neuralGroup.rotation.x = 0.06 - mouse.ny * 0.1;
+        camera.position.set(mouse.nx * 0.4, 0.3 - mouse.ny * 0.3, 8.8);
+        camera.lookAt(0.2, 0.2, 0);
+        neuralPulses.forEach((p) => {
+          const u = (t * 0.55 + p.offset) % 1;
+          p.mesh.position.lerpVectors(p.a, p.b, u);
+        });
+      } else if (lossGroup.visible) {
+        lossGroup.rotation.y = t * 0.12 + mouse.nx * 0.25;
+        camera.position.set(0.8 + mouse.nx * 0.5, 4.8 - mouse.ny * 0.6, 10.6);
+        camera.lookAt(0, -0.6, 0);
+        const u = (t * 0.18) % 1;
+        optimizerBall.position.copy(descentCurve.getPointAt(u));
       } else {
-        oceanUniforms.uTime.value = t;
-        const seaT = Math.min(1, Math.max(0, (smoothProgress - 0.085) / 0.82));
-        const shipZ = -seaT * 36;
-        const shipX = Math.sin(seaT * Math.PI * 2.4) * 2.6;
-        vesselGroup.position.set(shipX, 0.04 + Math.sin(t * 1.4) * 0.04, shipZ);
-        vesselGroup.rotation.y = Math.cos(seaT * Math.PI * 2.4) * -0.25;
-        vesselGroup.rotation.z = Math.sin(t * 1.1) * 0.035;
-        wakeMat.opacity = 0.62 + Math.sin(t * 3.5) * 0.12;
+        camera.position.set(mouse.nx * 0.35, -mouse.ny * 0.25, 7.5);
+        camera.lookAt(0, 0, 0);
 
-        oceanPlane.position.z = shipZ - 12;
-        camera.position.set(shipX + 1.8 + mouse.nx * 0.8, 7.6 - mouse.ny * 0.5, shipZ + 6.4);
-        camera.lookAt(shipX - 0.6, 0.2, shipZ - 1.6);
+        const attr = snowGeo.attributes.position;
+        for (let i = 0; i < snowCount; i++) {
+          let y = attr.getY(i) + 0.008;
+          if (y > 5.5) y = -5.5;
+          attr.setY(i, y);
+        }
+        attr.needsUpdate = true;
 
-        gulls.forEach((g) => {
-          g.mesh.position.x = shipX - 1.8 + Math.cos(t * 0.8 + g.phase) * 2.8;
-          g.mesh.position.z = shipZ - 1.5 + Math.sin(t * 0.8 + g.phase) * 2.4;
-          g.mesh.position.y = 3.0 + Math.sin(t * 2.2 + g.phase) * 0.25;
-          const flap = Math.sin(t * 7.5 + g.phase) * 0.35;
-          g.wingL.rotation.y = flap;
-          g.wingR.rotation.y = -flap;
-        });
-
-        foamRings.forEach((f, idx) => {
-          const s = 1 + Math.sin(t * 1.6 + idx) * 0.045;
-          f.scale.set(s, s, 1);
-        });
+        sonarSweep.visible = sceneType === "photo_sonar";
+        if (sonarSweep.visible) {
+          sonarSweep.position.y = Math.sin(t * 0.85) * 3.4;
+        }
+        polyRingsGroup.visible = sceneType === "photo_polygons";
+        if (polyRingsGroup.visible) {
+          polyRingsGroup.children.forEach((r, idx) => {
+            r.rotation.z = t * (0.18 + idx * 0.07) * (idx % 2 === 0 ? 1 : -1);
+          });
+        }
+        sonarPulseGroup.visible = sceneType === "photo_rings";
+        if (sonarPulseGroup.visible) {
+          sonarPulseGroup.children.forEach((sr, idx) => {
+            const p = (t * 0.35 + idx * 0.25) % 1;
+            const sc = 0.4 + p * 3.8;
+            sr.scale.set(sc, sc, 1);
+            sr.material.opacity = (1 - p) * 0.42;
+          });
+        }
       }
 
       renderer.render(scene, camera);
@@ -1638,7 +1723,7 @@
       renderer.setSize(window.innerWidth, window.innerHeight);
     });
 
-    setTimeout(() => preloader.classList.add("done"), 650);
+    setTimeout(() => preloader.classList.add("done"), 620);
     requestAnimationFrame(animate);
   }
 
@@ -1653,18 +1738,14 @@
       smoothProgress += (targetProgress - smoothProgress) * 0.085;
       updateStageOverlays(smoothProgress);
       animateWaveIcon(ts);
-      const grad = ctx.createLinearGradient(0, 0, 0, c.height);
-      grad.addColorStop(0, "#000d15");
-      grad.addColorStop(1, "#042642");
-      ctx.fillStyle = grad;
-      ctx.fillRect(0, 0, c.width, c.height);
+      ctx.clearRect(0, 0, c.width, c.height);
       requestAnimationFrame(loop);
     }
     setTimeout(() => preloader.classList.add("done"), 450);
     requestAnimationFrame(loop);
   }
 
-  /* ---------- Mouse Tracking & Auto-Probe Assets HTTP ---------- */
+  /* ---------- Mouse & Auto-Carga HTTP ---------- */
   document.addEventListener("mousemove", (e) => {
     mouse.x = e.clientX;
     mouse.y = e.clientY;
@@ -1695,7 +1776,7 @@
     } catch (_) {}
   }
 
-  /* ---------- Bootstrap ---------- */
+  /* ---------- Inicio ---------- */
   buildTimelineDotsAndMenu();
   probeRemoteAssets();
   updateStageOverlays(0);

@@ -4,7 +4,7 @@
 - **Abrir Notebook en Google Colab (1-Click):** https://colab.research.google.com/github/angel-ai-dev/abyssal-ai/blob/main/notebooks/abyssal_ai_finetuning_colab.ipynb
 
 > **Proyecto Final de Inteligencia Artificial — Línea 2: Visión Artificial (Segmentación en Video con YOLO)**  
-> **Integrantes:** Samuel · Fabián · Giraldo
+> **Integrantes:** Samuel · Fabián · Ángel
 
 **ABYSSAL AI** implementa un sistema de **segmentación de instancias en video** basado en **YOLO11-seg** y entrenado mediante *fine-tuning* sobre el dataset real **TrashCan 1.0** (JAMSTEC / Universidad de Minnesota) para permitir que vehículos submarinos no tripulados (**ROVs**) identifiquen residuos plásticos y metálicos con precisión de píxel, evitando colisiones con fauna y corales mediante un protocolo automático de **exclusión biológica**.
 
