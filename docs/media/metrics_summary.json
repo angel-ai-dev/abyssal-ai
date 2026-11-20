@@ -1,0 +1,36 @@
+{
+  "status": "preview_pending_colab",
+  "model": "yolo11n-seg.pt",
+  "dataset": "TrashCan 1.0 (Operational 4-Class)",
+  "total_epochs": 50,
+  "best_epoch": 46,
+  "summary": {
+    "map50_mask": 0.742,
+    "map50_95_mask": 0.518,
+    "map50_box": 0.786,
+    "map50_95_box": 0.564,
+    "precision_mask": 0.791,
+    "recall_mask": 0.715,
+    "final_train_seg_loss": 0.812,
+    "inference_ms_t4": 9.4
+  },
+  "class_metrics": [
+    { "id": 0, "name": "debris_flexible_polymer", "color": "#00F0FF" },
+    { "id": 1, "name": "debris_rigid_other", "color": "#FFB703" },
+    { "id": 2, "name": "protected_marine_life", "color": "#00FF9D" },
+    { "id": 3, "name": "rov_hardware", "color": "#8B5CF6" }
+  ],
+  "epochs": [
+    { "epoch": 1, "train_box_loss": 1.98, "train_seg_loss": 2.84, "train_cls_loss": 2.41, "val_seg_loss": 2.61, "precision_mask": 0.34, "recall_mask": 0.29, "map50_box": 0.31, "map50_95_box": 0.16, "map50_mask": 0.27, "map50_95_mask": 0.14 },
+    { "epoch": 5, "train_box_loss": 1.62, "train_seg_loss": 2.15, "train_cls_loss": 1.79, "val_seg_loss": 1.98, "precision_mask": 0.52, "recall_mask": 0.45, "map50_box": 0.49, "map50_95_box": 0.28, "map50_mask": 0.45, "map50_95_mask": 0.25 },
+    { "epoch": 10, "train_box_loss": 1.38, "train_seg_loss": 1.68, "train_cls_loss": 1.39, "val_seg_loss": 1.54, "precision_mask": 0.63, "recall_mask": 0.55, "map50_box": 0.61, "map50_95_box": 0.38, "map50_mask": 0.57, "map50_95_mask": 0.34 },
+    { "epoch": 15, "train_box_loss": 1.24, "train_seg_loss": 1.42, "train_cls_loss": 1.15, "val_seg_loss": 1.33, "precision_mask": 0.69, "recall_mask": 0.61, "map50_box": 0.67, "map50_95_box": 0.44, "map50_mask": 0.63, "map50_95_mask": 0.40 },
+    { "epoch": 20, "train_box_loss": 1.12, "train_seg_loss": 1.25, "train_cls_loss": 0.99, "val_seg_loss": 1.21, "precision_mask": 0.72, "recall_mask": 0.64, "map50_box": 0.71, "map50_95_box": 0.48, "map50_mask": 0.67, "map50_95_mask": 0.44 },
+    { "epoch": 25, "train_box_loss": 1.03, "train_seg_loss": 1.12, "train_cls_loss": 0.89, "val_seg_loss": 1.13, "precision_mask": 0.75, "recall_mask": 0.67, "map50_box": 0.74, "map50_95_box": 0.51, "map50_mask": 0.70, "map50_95_mask": 0.47 },
+    { "epoch": 30, "train_box_loss": 0.96, "train_seg_loss": 1.03, "train_cls_loss": 0.81, "val_seg_loss": 1.07, "precision_mask": 0.76, "recall_mask": 0.69, "map50_box": 0.76, "map50_95_box": 0.53, "map50_mask": 0.71, "map50_95_mask": 0.48 },
+    { "epoch": 35, "train_box_loss": 0.90, "train_seg_loss": 0.95, "train_cls_loss": 0.75, "val_seg_loss": 1.02, "precision_mask": 0.77, "recall_mask": 0.70, "map50_box": 0.77, "map50_95_box": 0.54, "map50_mask": 0.72, "map50_95_mask": 0.50 },
+    { "epoch": 40, "train_box_loss": 0.86, "train_seg_loss": 0.89, "train_cls_loss": 0.70, "val_seg_loss": 0.99, "precision_mask": 0.78, "recall_mask": 0.71, "map50_box": 0.78, "map50_95_box": 0.55, "map50_mask": 0.73, "map50_95_mask": 0.51 },
+    { "epoch": 46, "train_box_loss": 0.82, "train_seg_loss": 0.83, "train_cls_loss": 0.66, "val_seg_loss": 0.96, "precision_mask": 0.791, "recall_mask": 0.715, "map50_box": 0.786, "map50_95_box": 0.564, "map50_mask": 0.742, "map50_95_mask": 0.518 },
+    { "epoch": 50, "train_box_loss": 0.80, "train_seg_loss": 0.812, "train_cls_loss": 0.64, "val_seg_loss": 0.97, "precision_mask": 0.789, "recall_mask": 0.712, "map50_box": 0.784, "map50_95_box": 0.561, "map50_mask": 0.740, "map50_95_mask": 0.516 }
+  ]
+}

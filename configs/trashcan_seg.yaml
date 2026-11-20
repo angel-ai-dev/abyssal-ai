@@ -1,0 +1,13 @@
+# Configuración de dataset YOLO-seg para ABYSSAL AI
+# Taxonomía operativa de 4 clases consolidada desde TrashCan 1.0 (JAMSTEC / UMN)
+
+path: ../datasets/trashcan_yolo
+train: images/train
+val: images/val
+
+nc: 4
+names:
+  0: debris_flexible_polymer
+  1: debris_rigid_other
+  2: protected_marine_life
+  3: rov_hardware
