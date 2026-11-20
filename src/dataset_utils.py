@@ -11,8 +11,8 @@ from pathlib import Path
 from typing import Any
 
 TRASHCAN_ZIP_URL = (
-    "https://conservancy.umn.edu/bitstream/handle/11299/214865/"
-    "dataset.zip?sequence=12&isAllowed=y"
+    "https://conservancy.umn.edu/server/api/core/bitstreams/"
+    "fffa78cc-3abf-42b9-b019-bc15a953a8e9/content"
 )
 
 OPERATIONAL_CLASS_NAMES: dict[int, str] = {
