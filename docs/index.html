@@ -3,645 +3,255 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ABYSSAL AI — Segmentación Submarina en Tiempo Real (YOLO11-seg)</title>
-  <meta name="description" content="Sistema autónomo de segmentación de instancias marinas con YOLO11-seg y TrashCan 1.0 para inspección y limpieza segura mediante ROVs." />
+  <title>ABYSSAL AI — Vision Below The Surface | YOLO11-seg</title>
+  <meta name="description" content="Segmentación de instancias submarinas en tiempo real con YOLO11-seg y TrashCan 1.0 para ROVs autónomos." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
+  <script src="vendor/three.min.js" defer></script>
+  <script src="app.js" defer></script>
 </head>
 <body>
-  <!-- Fondo oceánico abisal + grilla de telemetría + partículas marinas -->
-  <div class="abyss-backdrop" aria-hidden="true">
-    <div class="caustic caustic-1"></div>
-    <div class="caustic caustic-2"></div>
-    <div class="telemetry-grid"></div>
-    <canvas id="abyssCanvas"></canvas>
+  <!-- Preloader orbital inspirado en OceanX 2025 -->
+  <div id="preloader" class="preloader" aria-hidden="true">
+    <div class="preloader-rings">
+      <div class="ring-outer">
+        <span class="ring-dot"></span>
+      </div>
+      <div class="ring-inner"></div>
+      <div class="preloader-wordmark">ABYSSAL<span>AI</span></div>
+    </div>
+    <span class="mono-12 preloader-label">LOADING OCEAN TELEMETRY</span>
   </div>
 
-  <!-- Cursor contextual tipo Awwwards -->
-  <div id="cursorPill" class="cursor-pill" aria-hidden="true">
-    <span id="cursorLabel">EXPLORAR</span>
-  </div>
+  <!-- Escena WebGL 3D fija en segundo plano + grilla sutil de cruces -->
+  <canvas id="webglCanvas" class="webgl-canvas" aria-hidden="true"></canvas>
+  <canvas id="fallback2dCanvas" class="webgl-canvas hidden" aria-hidden="true"></canvas>
+  <div class="crosshair-overlay" aria-hidden="true"></div>
 
-  <!-- Barra superior persistente ROV Mission Control -->
-  <header class="topbar">
-    <div class="brand">
-      <span class="brand-dot"></span>
-      <span class="brand-name">ABYSSAL <em>// AI</em></span>
-      <span class="brand-tag">YOLO11-SEG · ROV VISION</span>
-    </div>
+  <!-- Header fijo estilo OceanX 2025 -->
+  <header class="header" id="siteHeader">
+    <button id="btnAudio" class="audio-btn" type="button" aria-label="Alternar audio ambiental">
+      <span class="circle-ring">
+        <svg class="wave-svg" viewBox="0 0 36 36" fill="none">
+          <path id="waveBack" d="M4 18 Q 11 10, 18 18 T 32 18" stroke="#90e0ef" stroke-width="1.3" opacity="0.48" />
+          <path id="waveFront" d="M4 18 Q 11 26, 18 18 T 32 18" stroke="#90e0ef" stroke-width="1.5" />
+        </svg>
+      </span>
+      <span id="audioLabel" class="mono-12">AUDIO OFF</span>
+    </button>
 
-    <div class="topbar-center">
-      <span class="coord-chip">36.2048° N · 138.2529° E · SEA OF JAPAN</span>
-      <span class="sep">·</span>
-      <span id="topZoneLabel" class="zone-chip">ZONA EPIPELÁGICA · 0 m</span>
-    </div>
+    <button id="btnBrandHome" class="brand-logo" type="button" aria-label="Volver al inicio">
+      ABYSSAL<span class="brand-x">X</span>AI
+    </button>
 
-    <div class="topbar-actions">
-      <button id="btnIndex" class="hud-btn" type="button" title="Índice de diapositivas (Tecla G)">
-        <span>ÍNDICE</span><kbd>G</kbd>
-      </button>
-      <button id="btnFullscreen" class="hud-btn" type="button" title="Pantalla completa (Tecla F)">
-        <span>FULL</span><kbd>F</kbd>
-      </button>
+    <button id="btnChapters" class="chapters-pill is-hidden" type="button" aria-label="Abrir menú de capítulos">
+      <span class="pill-text-wrap mono-12">
+        <span class="bw1">CHAPTERS</span>
+        <span class="bw2">CHAPTERS</span>
+      </span>
+      <span class="pill-circle">
+        <span class="burger-lines" aria-hidden="true">
+          <i class="l1"></i>
+          <i class="l2"></i>
+          <i class="l3"></i>
+        </span>
+      </span>
+    </button>
+
+    <div class="header-line" aria-hidden="true">
+      <div id="headerProgressFill" class="progress-fill"></div>
     </div>
   </header>
 
-  <!-- Altímetro vertical de profundidad oceánica (inspirado en The Sea We Breathe) -->
-  <aside class="depth-rail" aria-label="Indicador de profundidad oceánica">
-    <div class="depth-readout">
-      <span class="depth-label">DEPTH</span>
-      <strong id="depthValue">0 m</strong>
-      <small id="pressureValue">1.0 ATM</small>
-    </div>
-    <div class="depth-track">
-      <div id="depthFill" class="depth-fill"></div>
-      <div id="depthNeedle" class="depth-needle"></div>
-      <div id="depthTicks" class="depth-ticks"></div>
-    </div>
-  </aside>
+  <!-- Sello inferior izquierdo & Control inferior derecho -->
+  <div id="yearStamp" class="year-stamp is-hidden" aria-hidden="true">
+    <span class="eyebrow-row"><i class="sq"></i><span class="mono-12">2026</span></span>
+    <span class="mono-10 stamp-sub">ABYSSAL AI · ROV<br />SEGMENTATION</span>
+  </div>
 
-  <!-- Deck principal de 8 diapositivas en pantalla completa -->
-  <main id="deck" class="deck" aria-live="polite">
+  <button id="btnFullscreen" class="share-control" type="button" aria-label="Pantalla completa">
+    <span class="mono-12">FULLSCREEN</span>
+    <span class="circle-ring arrow-swap">
+      <svg class="arr-out" viewBox="0 0 24 24" fill="none">
+        <path d="M7 17L17 7M17 7H9M17 7V15" stroke="#90e0ef" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+      <span class="arr-in-bg">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M7 17L17 7M17 7H9M17 7V15" stroke="#001c35" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </span>
+    </span>
+  </button>
 
-    <!-- SLIDE 01: HERO -->
-    <section class="slide active" data-depth="0" data-pressure="1.0" data-zone="ZONA EPIPELÁGICA" data-section="01 · INMERSIÓN">
-      <div class="slide-inner hero-layout">
-        <div class="hero-kicker">
-          <span class="pulse-badge">PROYECTO FINAL · INTELIGENCIA ARTIFICIAL · LÍNEA 2</span>
-          <span class="mono-meta">SEGMENTACIÓN DE INSTANCIAS EN VIDEO</span>
-        </div>
+  <!-- Contenedor virtual de scroll 2400vh + Capa fija desacoplada -->
+  <div id="scroller" class="scroller">
+    <div class="scroller-length"></div>
+  </div>
 
-        <h1 class="hero-title" data-cursor="EXPLORAR">
-          ABYSSAL<span>AI</span>
-        </h1>
+  <main id="stickyStage" class="sticky-stage">
 
-        <p class="hero-subtitle">
-          Segmentación de instancias submarinas a nivel de píxel con <strong>YOLO11-seg</strong> y <strong>TrashCan 1.0</strong> para la extracción robótica segura sin colisión biológica.
-        </p>
+        <!-- CAPA HERO (Globo 3D Intro) -->
+        <section id="heroOverlay" class="stage-layer hero-layer">
+          <div class="hero-center">
+            <div class="eyebrow-row hero-eyebrow">
+              <i class="sq"></i>
+              <span class="mono-14">ABYSSAL AI · PROYECTO FINAL IA</span>
+            </div>
 
-        <div class="hero-pills">
-          <div class="metric-pill"><span>MODELO</span><strong>YOLO11n-seg</strong></div>
-          <div class="metric-pill"><span>DATASET</span><strong>7,212 Imgs ROV (JAMSTEC)</strong></div>
-          <div class="metric-pill"><span>TAXONOMÍA</span><strong>4 Clases Operativas</strong></div>
-          <div class="metric-pill"><span>OBJETIVO</span><strong>Pinza Segura + Bio-Exclusión</strong></div>
-        </div>
+            <h1 class="title-big">Vision Below<br />The Surface</h1>
 
-        <div class="hero-cta-row">
-          <button id="btnStartDive" class="cta-primary" type="button">
-            <span>INICIAR INMERSIÓN</span>
-            <span class="arrow">→</span>
-          </button>
-          <span class="shortcut-hint">Usa <kbd>←</kbd> <kbd>→</kbd> o rueda · <kbd>G</kbd> Índice · <kbd>F</kbd> Fullscreen</span>
-        </div>
+            <button id="btnEnterExp" class="pill-cta white" type="button">
+              <span class="pill-cta-label">
+                <span class="bw1">ENTER EXPERIENCE</span>
+                <span class="bw2">ENTER EXPERIENCE</span>
+              </span>
+              <span class="cta-orange-circle" aria-hidden="true">
+                <svg viewBox="0 0 20 20" fill="none">
+                  <path d="M4 10H16M16 10L11 5M16 10L11 15" stroke="#00263e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </span>
+            </button>
 
-        <div class="hero-footer">
-          <span>EQUIPO: <strong>Samuel · Fabián · Giraldo</strong></span>
-          <span>ENTORNO: <strong>Colab GPU T4 + Web Telemetry HUD</strong></span>
-        </div>
-      </div>
-    </section>
+            <div class="partners-block">
+              <span class="eyebrow-row"><i class="sq"></i><span class="mono-12">POWERED BY OPEN RESEARCH &amp; EDGE AI</span></span>
+              <div class="partners-row mono-14">
+                <span>YOLO11-SEG</span>
+                <span>TRASHCAN 1.0</span>
+                <span>JAMSTEC J-EDI</span>
+                <span>UMN IRVLAB</span>
+                <span>COLAB GPU T4</span>
+              </div>
+            </div>
+          </div>
 
-    <!-- SLIDE 02: CONTEXTO Y PROBLEMÁTICA -->
-    <section class="slide" data-depth="180" data-pressure="19.0" data-zone="ZONA MESOPELÁGICA ALTA" data-section="02 · CONTEXTO Y PROBLEMA">
-      <div class="slide-inner split-layout">
-        <div class="col-left">
-          <span class="eyebrow">02 // CONTEXTO Y PROBLEMÁTICA REAL</span>
-          <h2 class="slide-title">Limpiar el océano sin destruir lo que vive en él.</h2>
-          <p class="slide-lead">
-            Los ROVs (vehículos operados remotamente) enfrentan condiciones ópticas hostiles. Sin segmentación pixel a pixel, un brazo autónomo no distingue una red fantasma de un arrecife o especie bentónica en contacto.
+          <p class="hero-summary text-small">
+            Segmentación de instancias en tiempo real para vehículos submarinos autónomos (ROVs). Delimitación pixel a pixel entre polímeros marinos y ecosistemas protegidos sin colisión biológica.
           </p>
 
-          <div class="kpi-trio">
-            <article class="kpi-card">
-              <strong class="kpi-num" data-count="14">14M+</strong>
-              <span>Toneladas de plástico ingresan al océano cada año</span>
-            </article>
-            <article class="kpi-card">
-              <strong class="kpi-num" data-count="90">~90%</strong>
-              <span>Operación ROV actual sigue siendo teleoperada manualmente</span>
-            </article>
-            <article class="kpi-card accent-cyan">
-              <strong class="kpi-num" data-count="65">&gt;65%</strong>
-              <span>Área de fondo erróneamente incluida por bounding boxes en objetos curvos</span>
-            </article>
+          <div class="hero-bottom-meta mono-10">
+            <span>SAMUEL · FABIÁN · GIRALDO</span>
+            <span>LÍNEA 2 · SEGMENTACIÓN EN VIDEO</span>
           </div>
-        </div>
+        </section>
 
-        <div class="col-right problem-stack">
-          <article class="glass-card active-prob" data-cursor="INSPECCIONAR">
-            <div class="card-head">
-              <span class="mono-id">PRB-01</span>
-              <span class="tag-pill cyan">ÓPTICA SUBMARINA</span>
+        <!-- CAPA DE CAPÍTULOS SOBRE OCÉANO 3D (01 - 06) -->
+        <section id="chapterOverlay" class="stage-layer chapter-layer is-hidden" aria-live="polite">
+          <div class="chapter-copy">
+            <div class="eyebrow-row">
+              <i class="sq"></i>
+              <span id="chIdxLabel" class="mono-14">CHAPTER 01</span>
             </div>
-            <h3>Atenuación espectral y turbidez</h3>
-            <p>A partir de los 10 m desaparece la longitud de onda roja. Focos LED del ROV generan retrodispersión (<em>marine snow</em>) que degrada bordes y contrastes en video.</p>
-          </article>
-
-          <article class="glass-card" data-cursor="INSPECCIONAR">
-            <div class="card-head">
-              <span class="mono-id">PRB-02</span>
-              <span class="tag-pill amber">GEOMETRÍA AMORFA</span>
-            </div>
-            <h3>Redes fantasma y plásticos deformables</h3>
-            <p>Bolsas, sogas y láminas flotan en diagonal y cambian de forma en cada cuadro. Un rectángulo ortogonal no representa su contorno real de agarre.</p>
-          </article>
-
-          <article class="glass-card" data-cursor="INSPECCIONAR">
-            <div class="card-head">
-              <span class="mono-id">PRB-03</span>
-              <span class="tag-pill emerald">SEGURIDAD BIOLÓGICA</span>
-            </div>
-            <h3>Riesgo de captura incidental</h3>
-            <p>Corales, estrellas de mar y peces habitan junto a los residuos. El sistema debe calcular una <strong>zona de exclusión biológica</strong> antes de activar la pinza.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- SLIDE 03: POR QUÉ SEGMENTACIÓN Y NO BOUNDING BOXES -->
-    <section class="slide" data-depth="450" data-pressure="46.0" data-zone="ZONA MESOPELÁGICA" data-section="03 · JUSTIFICACIÓN TÉCNICA">
-      <div class="slide-inner stack-layout">
-        <div class="section-header-row">
-          <div>
-            <span class="eyebrow">03 // BOUNDING BOX VS. INSTANCE SEGMENTATION</span>
-            <h2 class="slide-title-sm">Por qué las cajas rectangulares fallan bajo el agua</h2>
-          </div>
-          <div class="compare-live-stats">
-            <div class="stat-chip danger">
-              <span>SOLAPAMIENTO BBOX EN CORAL</span>
-              <strong id="cmpWasteVal">68.4%</strong>
-            </div>
-            <div class="stat-chip emerald">
-              <span>SOLAPAMIENTO MÁSCARA POLIGONAL</span>
-              <strong>0.0%</strong>
-            </div>
-          </div>
-        </div>
-
-        <div class="comparator-stage" id="comparatorStage" data-cursor="ARRASTRAR">
-          <!-- Capa IZQUIERDA (Bounding Box tradicional) -->
-          <div class="compare-layer compare-before">
-            <div class="layer-badge danger">YOLO-DETECT · BOUNDING BOX TRADICIONAL</div>
-            <svg viewBox="0 0 960 440" class="compare-svg" aria-label="Comparación Bounding Box">
-              <defs>
-                <linearGradient id="seaGrad1" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stop-color="#071e38" />
-                  <stop offset="100%" stop-color="#030b16" />
-                </linearGradient>
-              </defs>
-              <rect width="960" height="440" fill="url(#seaGrad1)" />
-              <!-- Luz marina -->
-              <polygon points="180,0 320,0 440,440 80,440" fill="rgba(0,240,255,0.05)" />
-              <polygon points="560,0 710,0 820,440 480,440" fill="rgba(0,255,157,0.04)" />
-              <!-- Fondo marino -->
-              <path d="M0,380 Q240,350 480,382 T960,368 L960,440 L0,440 Z" fill="#071522" />
-              <!-- Coral vivo cercano -->
-              <path d="M510,380 C495,330 470,295 485,255 C500,235 518,265 524,295 C532,240 558,210 572,245 C585,280 562,315 568,340 C584,295 612,280 622,310 C630,335 604,365 595,382 Z" fill="#134e4a" stroke="#1f7a6e" stroke-width="2" />
-              <!-- Pez cerca del residuo -->
-              <path d="M625,215 C655,188 705,190 735,215 C755,200 772,192 772,215 C772,238 755,230 735,215 C705,240 655,242 625,215 Z" fill="#2c7da0" />
-              <!-- Botella + red diagonal -->
-              <path d="M250,150 L295,128 L465,245 L498,288 L452,318 L412,292 L245,176 Z" fill="#9fb6c3" opacity="0.85" />
-              <path d="M350,180 C410,160 475,190 520,255 C548,295 510,332 455,305 C395,275 352,225 350,180 Z" fill="none" stroke="#c8d6df" stroke-width="2.5" stroke-dasharray="6 4" />
-              <!-- Bounding Boxes rectangulares burdos -->
-              <rect x="235" y="122" width="318" height="205" fill="rgba(255,59,92,0.14)" stroke="#ff3b5c" stroke-width="3" stroke-dasharray="8 6" />
-              <text x="118" y="108" fill="#ff3b5c" font-family="JetBrains Mono" font-size="13" font-weight="600">BBOX DEBRIS 0.89 · (68.4% RUIDO EN CORAL)</text>
-              <rect x="472" y="216" width="160" height="170" fill="rgba(255,183,3,0.10)" stroke="#ffb703" stroke-width="2.5" />
-              <text x="482" y="206" fill="#ffb703" font-family="JetBrains Mono" font-size="12">BBOX CORAL · CONFLICTO</text>
-              <!-- Alerta en el centro de la caja -->
-              <circle cx="394" cy="224" r="14" fill="none" stroke="#ff3b5c" stroke-width="2" />
-              <text x="148" y="352" fill="#ff3b5c" font-family="JetBrains Mono" font-size="13" font-weight="600">⚠ UNSAFE GRASP: PINZA INTERSECA CORAL</text>
-            </svg>
+            <div id="chLocationLabel" class="mono-16 ch-subtitle-cyan">THE OCEAN CRISIS</div>
+            <h2 id="chTitle" class="ch-headline">Beyond Bounding Boxes<br />in Deep Water</h2>
+            <p id="chExcerpt" class="ch-desc">
+              Los rectángulos tradicionales abarcan hasta 68% de coral vivo y fondo marino. La segmentación pixel a pixel habilita agarre seguro.
+            </p>
+            <button id="btnLearnMore" class="pill-cta white learn-more-btn" type="button">
+              <span class="pill-cta-label">
+                <span class="bw1">LEARN MORE</span>
+                <span class="bw2">LEARN MORE</span>
+              </span>
+              <span class="orange-dot" aria-hidden="true"></span>
+            </button>
           </div>
 
-          <!-- Capa DERECHA (Instance Segmentation YOLO11-seg) -->
-          <div class="compare-layer compare-after" id="compareAfter">
-            <div class="layer-badge cyan">YOLO11-SEG · MÁSCARAS POLIGONALES + BIO-EXCLUSIÓN</div>
-            <svg viewBox="0 0 960 440" class="compare-svg" aria-label="Comparación Segmentación de Instancias">
-              <defs>
-                <linearGradient id="seaGrad2" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stop-color="#071e38" />
-                  <stop offset="100%" stop-color="#030b16" />
-                </linearGradient>
-              </defs>
-              <rect width="960" height="440" fill="url(#seaGrad2)" />
-              <polygon points="180,0 320,0 440,440 80,440" fill="rgba(0,240,255,0.06)" />
-              <polygon points="560,0 710,0 820,440 480,440" fill="rgba(0,255,157,0.05)" />
-              <path d="M0,380 Q240,350 480,382 T960,368 L960,440 L0,440 Z" fill="#071522" />
-              <!-- Coral + Máscara Esmeralda exacta -->
-              <path d="M510,380 C495,330 470,295 485,255 C500,235 518,265 524,295 C532,240 558,210 572,245 C585,280 562,315 568,340 C584,295 612,280 622,310 C630,335 604,365 595,382 Z" fill="rgba(0,255,157,0.34)" stroke="#00ff9d" stroke-width="2.5" />
-              <!-- Halo de exclusión biológica -->
-              <path d="M466,386 C452,318 456,222 548,206 C618,202 648,292 612,386 Z" fill="none" stroke="#00ff9d" stroke-width="1.5" stroke-dasharray="5 5" opacity="0.85" />
-              <text x="505" y="198" fill="#00ff9d" font-family="JetBrains Mono" font-size="13" font-weight="600">BIO-EXCLUSION HALO (protected_marine_life)</text>
-              <!-- Pez + Máscara Esmeralda -->
-              <path d="M625,215 C655,188 705,190 735,215 C755,200 772,192 772,215 C772,238 755,230 735,215 C705,240 655,242 625,215 Z" fill="rgba(0,255,157,0.38)" stroke="#00ff9d" stroke-width="2" />
-              <!-- Botella + Red con máscara cian exacta -->
-              <path d="M250,150 L295,128 L465,245 L498,288 L452,318 L412,292 L245,176 Z" fill="rgba(0,240,255,0.38)" stroke="#00f0ff" stroke-width="2.8" />
-              <path d="M350,180 C410,160 475,190 520,255 C548,295 510,332 455,305 C395,275 352,225 350,180 Z" fill="rgba(0,240,255,0.18)" stroke="#00f0ff" stroke-width="2" stroke-dasharray="6 4" />
-              <!-- Retícula de agarre seguro en zona libre de coral -->
-              <circle cx="332" cy="196" r="18" fill="none" stroke="#00f0ff" stroke-width="2" />
-              <circle cx="332" cy="196" r="4" fill="#00ff9d" />
-              <line x1="306" y1="196" x2="358" y2="196" stroke="#00f0ff" stroke-width="1.5" />
-              <line x1="332" y1="170" x2="332" y2="222" stroke="#00f0ff" stroke-width="1.5" />
-              <text x="505" y="112" fill="#00f0ff" font-family="JetBrains Mono" font-size="13" font-weight="600">POLYMER MASK 0.94 · CENTROIDE (332, 196)</text>
-              <text x="505" y="405" fill="#00ff9d" font-family="JetBrains Mono" font-size="13" font-weight="600">✓ SAFE GRASP VECTOR · 0.0% DAÑO BIOLÓGICO</text>
-            </svg>
+          <div class="timeline-hint mono-10">
+            <span id="timelineChapterDots" class="timeline-dots"></span>
+            <span>SCROLL O USA ← / → · ENTER PARA ABRIR DETALLE</span>
           </div>
+        </section>
 
-          <!-- Manija deslizadora -->
-          <div class="compare-handle" id="compareHandle" style="left: 50%">
-            <span class="handle-knob">◄►</span>
-          </div>
-          <input id="compareRange" class="compare-range" type="range" min="5" max="95" value="50" aria-label="Deslizador de comparación entre Bounding Box y Segmentación de Instancias" />
-        </div>
-
-        <p class="compare-caption">
-          Arrastra el divisor central: la segmentación extrae el <strong>centroide exacto de la máscara</strong> lejos del margen biológico, evitando que la pinza cierre sobre coral vivo.
-        </p>
-      </div>
-    </section>
-
-    <!-- SLIDE 04: DATASET TRASHCAN 1.0 Y TAXONOMÍA -->
-    <section class="slide" data-depth="1100" data-pressure="111.0" data-zone="ZONA BATIPELÁGICA" data-section="04 · DATASET Y TAXONOMÍA">
-      <div class="slide-inner stack-layout">
-        <div class="section-header-row">
-          <div>
-            <span class="eyebrow">04 // TRASHCAN 1.0 (JAMSTEC / UMN) → TAXONOMÍA OPERATIVA</span>
-            <h2 class="slide-title-sm">7,212 imágenes reales consolidadas en 4 clases accionables</h2>
-          </div>
-          <div class="carousel-controls">
-            <span id="taxCounter" class="mono-counter">01 — 04</span>
-            <button id="taxPrev" class="hud-icon-btn" type="button" aria-label="Tarjeta anterior">←</button>
-            <button id="taxNext" class="hud-icon-btn" type="button" aria-label="Siguiente tarjeta">→</button>
-          </div>
-        </div>
-
-        <div class="pipeline-strip">
-          <div class="pipe-step"><strong>1. Descarga Oficial</strong><span>DRUM Univ. Minnesota (J-EDI ROV Mar de Japón)</span></div>
-          <span class="pipe-arrow">→</span>
-          <div class="pipe-step"><strong>2. COCO → YOLO-seg</strong><span>Normalización poligonal [0, 1] y filtro de anillos</span></div>
-          <span class="pipe-arrow">→</span>
-          <div class="pipe-step"><strong>3. Mapeo Operativo</strong><span>22/16 clases originales → 4 clases para pinza ROV</span></div>
-          <span class="pipe-arrow">→</span>
-          <div class="pipe-step"><strong>4. Validación Estricta</strong><span>Integridad imagen↔txt y splits train/val</span></div>
-        </div>
-
-        <div class="taxonomy-viewport" id="taxonomyViewport" data-cursor="ARRASTRAR">
-          <div class="taxonomy-track" id="taxonomyTrack">
-            <article class="tax-card cyan">
-              <div class="tax-top">
-                <span class="tax-id">CLASE 00</span>
-                <span class="tax-hex">#00F0FF</span>
+        <!-- CAPA ENDING (Globo 3D Outro) -->
+        <section id="endingOverlay" class="stage-layer ending-layer is-hidden">
+          <div class="ending-grid">
+            <div class="ending-left">
+              <div class="eyebrow-row">
+                <i class="sq"></i>
+                <span class="mono-14">ABYSSAL AI · MISSION COMPLETE</span>
               </div>
-              <h3>debris_flexible_polymer</h3>
-              <p class="tax-desc">Residuos flexibles y flotantes de alta prioridad: bolsas, botellas plásticas, redes fantasma, sogas, caucho, textiles y envolturas.</p>
-              <div class="tax-tags">
-                <span>trash_bag</span><span>trash_bottle</span><span>trash_net</span><span>trash_rope</span><span>trash_tarp</span><span>trash_wrapper</span>
-              </div>
-              <div class="tax-policy">
-                <strong>ACCIÓN ROV:</strong> Prioridad máxima de agarre suave si distancia a fauna ≥ 45 px.
-              </div>
-            </article>
-
-            <article class="tax-card amber">
-              <div class="tax-top">
-                <span class="tax-id">CLASE 01</span>
-                <span class="tax-hex">#FFB703</span>
-              </div>
-              <h3>debris_rigid_other</h3>
-              <p class="tax-desc">Residuos rígidos o metálicos sumergidos: latas, contenedores industriales, tuberías descartadas y chatarra pesada en el lecho marino.</p>
-              <div class="tax-tags">
-                <span>trash_can</span><span>trash_container</span><span>trash_pipe</span><span>trash_wreckage</span><span>trash_unknown</span>
-              </div>
-              <div class="tax-policy">
-                <strong>ACCIÓN ROV:</strong> Ajuste de torque de pinza y estimación de masa por área de máscara.
-              </div>
-            </article>
-
-            <article class="tax-card emerald">
-              <div class="tax-top">
-                <span class="tax-id">CLASE 02</span>
-                <span class="tax-hex">#00FF9D</span>
-              </div>
-              <h3>protected_marine_life</h3>
-              <p class="tax-desc">Fauna y flora protegida observada por el ROV: peces, cangrejos, estrellas de mar, anguilas, moluscos y vegetación/corales bentónicos.</p>
-              <div class="tax-tags">
-                <span>animal_fish</span><span>animal_crab</span><span>animal_starfish</span><span>animal_eel</span><span>animal_shells</span><span>plant</span>
-              </div>
-              <div class="tax-policy">
-                <strong>ACCIÓN ROV:</strong> Genera halo de exclusión biológica; bloquea la pinza si hay cercanía crítica.
-              </div>
-            </article>
-
-            <article class="tax-card violet">
-              <div class="tax-top">
-                <span class="tax-id">CLASE 03</span>
-                <span class="tax-hex">#8B5CF6</span>
-              </div>
-              <h3>rov_hardware</h3>
-              <p class="tax-desc">Componentes visibles del propio vehículo submarino (brazos manipuladores, marcos de iluminación o patines) dentro del campo de la cámara.</p>
-              <div class="tax-tags">
-                <span>rov</span><span>manipulator_arm</span><span>camera_frame</span>
-              </div>
-              <div class="tax-policy">
-                <strong>ACCIÓN ROV:</strong> Auto-enmascarado para impedir que el sistema confunda su propio brazo con chatarra.
-              </div>
-            </article>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- SLIDE 05: ARQUITECTURA TÉCNICA YOLO11-SEG -->
-    <section class="slide" data-depth="1850" data-pressure="186.0" data-zone="ZONA BATIPELÁGICA MEDIA" data-section="05 · ARQUITECTURA YOLO11-SEG">
-      <div class="slide-inner stack-layout">
-        <div class="section-header-row">
-          <div>
-            <span class="eyebrow">05 // ARQUITECTURA NEURONAL DE SEGMENTACIÓN DE INSTANCIAS</span>
-            <h2 class="slide-title-sm">Flujo dual de tensores: Detección + Prototipos de Máscara</h2>
-          </div>
-          <button id="btnToggleArchFlow" class="hud-btn" type="button">
-            <span id="archFlowState">PAUSAR FLUJO</span>
-          </button>
-        </div>
-
-        <div class="arch-grid">
-          <div class="arch-diagram-box">
-            <svg id="archSvg" viewBox="0 0 820 380" class="arch-svg" aria-label="Arquitectura YOLO11-seg">
-              <defs>
-                <filter id="glowCyan" x="-30%" y="-30%" width="160%" height="160%">
-                  <feGaussianBlur stdDeviation="3" result="blur" />
-                  <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
-                </filter>
-              </defs>
-              <!-- Rutas de tensores -->
-              <path id="pathMain" d="M78,190 L195,190 L315,190 L435,190" fill="none" stroke="rgba(0,240,255,0.28)" stroke-width="3" />
-              <path id="pathDet" d="M435,190 C485,190 495,98 555,98 L695,98 L738,175" fill="none" stroke="rgba(255,183,3,0.34)" stroke-width="3" />
-              <path id="pathProto" d="M435,190 C485,190 495,282 555,282 L695,282 L738,205" fill="none" stroke="rgba(0,255,157,0.34)" stroke-width="3" />
-
-              <!-- Capa de pulsos animados -->
-              <g id="archPulses"></g>
-
-              <!-- Nodos interactivos -->
-              <g class="arch-node active" data-node="input" tabindex="0">
-                <rect x="20" y="150" width="110" height="80" rx="10" />
-                <text x="75" y="182">INPUT</text>
-                <text class="sub" x="75" y="204">640×640×3</text>
-              </g>
-              <g class="arch-node" data-node="backbone" tabindex="0">
-                <rect x="150" y="150" width="115" height="80" rx="10" />
-                <text x="207" y="182">BACKBONE</text>
-                <text class="sub" x="207" y="204">C3k2 + Conv</text>
-              </g>
-              <g class="arch-node" data-node="attention" tabindex="0">
-                <rect x="285" y="150" width="115" height="80" rx="10" />
-                <text x="342" y="182">SPPF + C2PSA</text>
-                <text class="sub" x="342" y="204">Atención Espacial</text>
-              </g>
-              <g class="arch-node" data-node="neck" tabindex="0">
-                <rect x="420" y="150" width="95" height="80" rx="10" />
-                <text x="467" y="182">NECK</text>
-                <text class="sub" x="467" y="204">PANet FPN</text>
-              </g>
-              <g class="arch-node" data-node="dethead" tabindex="0">
-                <rect x="545" y="54" width="140" height="86" rx="10" />
-                <text x="615" y="88">DETECT HEAD</text>
-                <text class="sub" x="615" y="108">Box + Cls + k=32</text>
-                <text class="sub" x="615" y="124">Coeffs c</text>
-              </g>
-              <g class="arch-node" data-node="protonet" tabindex="0">
-                <rect x="545" y="240" width="140" height="86" rx="10" />
-                <text x="615" y="274">PROTONET HEAD</text>
-                <text class="sub" x="615" y="294">32 Prototipos P</text>
-                <text class="sub" x="615" y="310">160×160</text>
-              </g>
-              <g class="arch-node" data-node="assembly" tabindex="0">
-                <rect x="705" y="142" width="102" height="96" rx="10" />
-                <text x="756" y="176">MASK</text>
-                <text class="sub" x="756" y="196">σ(P · cᵀ)</text>
-                <text class="sub" x="756" y="216">+ ROV HUD</text>
-              </g>
-            </svg>
-          </div>
-
-          <aside class="arch-inspector" id="archInspector">
-            <span class="mono-id" id="inspTag">NODO 01 · ENTRADA DE VIDEO</span>
-            <h3 id="inspTitle">Frame Submarino RGB (640×640×3)</h3>
-            <p id="inspDesc">Normalización de cada cuadro proveniente de la cámara del ROV. Durante fine-tuning en Colab se aplican aumentos de tono/saturación (HSV) y mosaico para robustez frente a turbidez y cambios de iluminación LED.</p>
-            <div class="insp-box">
-              <div><span>TENSOR</span><strong id="inspTensor">[B, 3, 640, 640]</strong></div>
-              <div><span>FUNCIÓN CLAVE</span><strong id="inspFormula">Preprocesamiento Letterbox + [0,1]</strong></div>
-            </div>
-            <div class="loss-formula">
-              <span class="mono-id">FUNCIÓN DE PÉRDIDA MULTI-TAREA</span>
-              <code>L = λ_box·L_CIoU+DFL + λ_seg·L_BCE(Mask) + λ_cls·L_BCE</code>
-            </div>
-          </aside>
-        </div>
-      </div>
-    </section>
-
-    <!-- SLIDE 06: FINE-TUNING EN COLAB Y MÉTRICAS -->
-    <section class="slide" data-depth="2600" data-pressure="261.0" data-zone="ZONA BATIPELÁGICA PROFUNDA" data-section="06 · ENTRENAMIENTO Y MÉTRICAS">
-      <div class="slide-inner stack-layout">
-        <div class="section-header-row">
-          <div>
-            <span class="eyebrow">06 // FINE-TUNING EN GOOGLE COLAB (GPU T4)</span>
-            <h2 class="slide-title-sm">Convergencia de pérdidas y desempeño Mask vs. Box</h2>
-          </div>
-          <span id="metricsStatusBadge" class="status-badge preview">PREVIEW DATA · RUN COLAB TO POPULATE REAL WEIGHTS</span>
-        </div>
-
-        <div class="metrics-grid">
-          <!-- Columna izquierda: Terminal Colab simulada -->
-          <div class="colab-panel">
-            <div class="panel-bar">
-              <span>colab_t4_runtime // abyssal_ai_finetuning_colab.ipynb</span>
-              <button id="btnReplayTerm" class="mini-btn" type="button">Reproducir Log</button>
-            </div>
-            <pre id="colabTermLog" class="term-pre"></pre>
-          </div>
-
-          <!-- Columna derecha: KPIs + Gráfica interactiva -->
-          <div class="charts-panel">
-            <div class="kpi-quad">
-              <div class="kpi-mini"><span>mAP@50 (MASK)</span><strong id="kpiMap50Mask">74.2%</strong></div>
-              <div class="kpi-mini"><span>mAP@50-95 (MASK)</span><strong id="kpiMap95Mask">51.8%</strong></div>
-              <div class="kpi-mini"><span>PRECISION / RECALL</span><strong id="kpiPrecRec">79.1% / 71.5%</strong></div>
-              <div class="kpi-mini"><span>INFERENCIA T4</span><strong id="kpiLatency">9.4 ms</strong></div>
+              <h2 class="title-big ending-title">Explore the<br />Repository</h2>
             </div>
 
-            <div class="chart-card">
-              <div class="chart-head">
-                <span id="chartTitle">Evolución mAP por Época (Mask vs Box)</span>
-                <div class="chart-tabs">
-                  <button class="chart-tab active" data-chart="map" type="button">mAP@50 / 50-95</button>
-                  <button class="chart-tab" data-chart="loss" type="button">Loss Convergencia</button>
-                </div>
-              </div>
-              <canvas id="metricsChart" width="620" height="235"></canvas>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- SLIDE 07: DEMO FUNCIONAL (LIVE ROV VISION CONSOLE) -->
-    <section class="slide" data-depth="3200" data-pressure="321.0" data-zone="ZONA ABISOPELÁGICA" data-section="07 · DEMO EN VIDEO">
-      <div class="slide-inner stack-layout">
-        <div class="section-header-row">
-          <div>
-            <span class="eyebrow">07 // DEMOSTRACIÓN FUNCIONAL · LIVE ROV VISION CONSOLE</span>
-            <h2 class="slide-title-sm">Inferencia por máscara con protocolo de bio-exclusión</h2>
-          </div>
-          <div class="demo-actions">
-            <span id="demoSourceBadge" class="status-badge sim">SIMULADOR INTERACTIVO ROV 60 FPS</span>
-            <label class="mini-btn upload-label" title="Cargar rov_raw.mp4, rov_segmented.mp4 y telemetry_frames.json desde Colab">
-              <span>Cargar Media Colab</span>
-              <input id="bundleFileInput" type="file" multiple accept=".mp4,.json" hidden />
-            </label>
-          </div>
-        </div>
-
-        <div class="console-grid">
-          <!-- Visor principal de video / simulador -->
-          <div class="visor-panel">
-            <div class="visor-toolbar">
-              <div class="mode-pills" id="visorModePills">
-                <button class="mode-pill" data-mode="raw" type="button">RAW FEED</button>
-                <button class="mode-pill" data-mode="masks" type="button">YOLO11-SEG MASKS</button>
-                <button class="mode-pill" data-mode="split" type="button">SPLIT COMPARE</button>
-                <button class="mode-pill active" data-mode="hud" type="button">HUD + BIO-EXCLUSION</button>
-              </div>
-              <button id="btnVisorPlay" class="mini-btn" type="button">Pausar</button>
-            </div>
-
-            <div class="visor-stage" id="visorStage" data-cursor="ESCANEAR">
-              <!-- Simulador 60fps nativo (siempre funcional sin dependencias externas) -->
-              <canvas id="rovSimCanvas" width="760" height="400"></canvas>
-
-              <!-- Capa de video pre-renderizado real desde Colab (oculta hasta cargar MP4) -->
-              <div id="videoDualWrap" class="video-dual-wrap hidden">
-                <video id="vidRaw" muted loop playsinline></video>
-                <video id="vidSeg" muted loop playsinline></video>
-                <div id="videoSplitDivider" class="video-split-divider hidden"></div>
+            <div class="ending-right">
+              <p class="text-regular ending-desc">
+                Código fuente modular, notebook reproducible en Google Colab T4 y consola interactiva de telemetría ROV listos para revisión técnica y despliegue en GitHub Pages.
+              </p>
+              <div class="ending-actions">
+                <a class="pill-cta white" href="https://github.com/angel-ai-dev/abyssal-ai" target="_blank" rel="noopener noreferrer">
+                  <span class="pill-cta-label">
+                    <span class="bw1">OPEN GITHUB REPO</span>
+                    <span class="bw2">OPEN GITHUB REPO</span>
+                  </span>
+                  <span class="orange-dot" aria-hidden="true"></span>
+                </a>
+                <a class="pill-cta glass" href="https://colab.research.google.com/github/angel-ai-dev/abyssal-ai/blob/main/notebooks/abyssal_ai_finetuning_colab.ipynb" target="_blank" rel="noopener noreferrer">
+                  <span class="pill-cta-label">
+                    <span class="bw1">RUN IN COLAB T4</span>
+                    <span class="bw2">RUN IN COLAB T4</span>
+                  </span>
+                </a>
               </div>
             </div>
           </div>
 
-          <!-- Panel derecho de telemetría en vivo -->
-          <aside class="telemetry-panel">
-            <div class="tel-status-box" id="telStatusBox">
-              <span class="tel-lbl">PROTOCOLO DE PINZA ROV</span>
-              <strong id="telGraspStatus">SAFE_GRASP</strong>
+          <div class="partners-block ending-partners">
+            <span class="eyebrow-row"><i class="sq"></i><span class="mono-12">EQUIPO DE INVESTIGACIÓN E IMPLEMENTACIÓN</span></span>
+            <div class="partners-row mono-14">
+              <span>SAMUEL</span>
+              <span>FABIÁN</span>
+              <span>GIRALDO</span>
+              <span>INTELIGENCIA ARTIFICIAL</span>
+              <span>2026</span>
             </div>
-
-            <div class="tel-metrics-grid">
-              <div class="tel-cell"><span>FPS</span><strong id="telFps">60.0</strong></div>
-              <div class="tel-cell"><span>LATENCIA</span><strong id="telMs">9.4 ms</strong></div>
-              <div class="tel-cell"><span>ÁREA RESIDUO</span><strong id="telDebrisPct">8.4%</strong></div>
-              <div class="tel-cell"><span>RUIDO EVITADO</span><strong id="telWastePct">59.2%</strong></div>
-              <div class="tel-cell"><span>DIST. FAUNA</span><strong id="telBioDist">142 px</strong></div>
-              <div class="tel-cell"><span>CENTROIDE</span><strong id="telCentroid">(340, 210)</strong></div>
-            </div>
-
-            <div class="tel-instances-wrap">
-              <span class="tel-lbl">INSTANCIAS SEGMENTADAS EN FRAME</span>
-              <div id="telInstancesList" class="tel-instances-list"></div>
-            </div>
-          </aside>
-        </div>
-      </div>
-    </section>
-
-    <!-- SLIDE 08: CONCLUSIONES Y ESCALABILIDAD -->
-    <section class="slide" data-depth="3800" data-pressure="381.0" data-zone="LECHO HADAL · CIERRE" data-section="08 · CONCLUSIONES">
-      <div class="slide-inner stack-layout">
-        <div class="section-header-row">
-          <div>
-            <span class="eyebrow">08 // CONCLUSIONES, LIMITACIONES Y ESCALABILIDAD</span>
-            <h2 class="slide-title-sm">De un notebook en Colab a visión embebida en vehículos reales</h2>
           </div>
-        </div>
-
-        <div class="closing-grid">
-          <article class="closing-card cyan">
-            <span class="mono-id">01 · RESULTADOS CLAVE</span>
-            <h3>Precisión espacial donde importa</h3>
-            <ul>
-              <li>Consolidación en <strong>4 clases operativas</strong> reduce ambigüedad y habilita decisiones automáticas de pinza.</li>
-              <li>Las máscaras poligonales evitan más de un <strong>55–68% de área errónea</strong> frente a bounding boxes en objetos flexibles.</li>
-              <li>Arquitectura <strong>YOLO11n-seg</strong> logra balance óptimo entre precisión de borde y latencia &lt; 15 ms en GPU.</li>
-            </ul>
-          </article>
-
-          <article class="closing-card amber">
-            <span class="mono-id">02 · LIMITACIONES IDENTIFICADAS</span>
-            <h3>Desafíos físicos del entorno marino</h3>
-            <ul>
-              <li>Alta turbidez y partículas iluminadas por focos LED (<em>backscatter</em>) pueden fragmentar máscaras delgadas.</li>
-              <li>Pérdida cromática en profundidad extrema reduce contraste entre plásticos translúcidos y sedimento.</li>
-              <li>La estimación actual de distancia biológica opera en <strong>2D en píxeles</strong> y requiere calibración de profundidad.</li>
-            </ul>
-          </article>
-
-          <article class="closing-card emerald">
-            <span class="mono-id">03 · ROADMAP DE INGENIERÍA</span>
-            <h3>Siguientes pasos hacia ROV real</h3>
-            <ul>
-              <li>Despliegue cuantizado <strong>ONNX / TensorRT FP16</strong> en <strong>NVIDIA Jetson Orin Nano</strong> a bordo del ROV.</li>
-              <li>Integración de <strong>cámara estéreo</strong> para convertir la distancia de píxeles en coordenadas métricas 3D (X, Y, Z).</li>
-              <li>Tracking temporal con <strong>ByteTrack</strong> para mantener ID persistente de residuos frente a corrientes fuertes.</li>
-            </ul>
-          </article>
-        </div>
-
-        <div class="repo-banner">
-          <div>
-            <strong>REPOSITORIO &amp; REPRODUCIBILIDAD</strong>
-            <span>Código modular, Notebook T4 en Colab y presentación web lista para GitHub Pages</span>
-          </div>
-          <div class="repo-paths">
-            <code>notebooks/abyssal_ai_finetuning_colab.ipynb</code>
-            <code>src/video_inference.py</code>
-            <code>configs/trashcan_seg.yaml</code>
-          </div>
-        </div>
-      </div>
-    </section>
+        </section>
 
   </main>
 
-  <!-- Barra inferior persistente de navegación -->
-  <footer class="deckbar">
-    <div class="deck-counter">
-      <strong id="slideNum">01</strong>
-      <span>/ 08</span>
-      <span id="deckSectionPill" class="section-pill">01 · INMERSIÓN</span>
+  <!-- Backdrop y Drawer Flotante Compartido (Chapters Menu <-> Split-Pane Chapter Detail) -->
+  <div id="drawerBackdrop" class="drawer-backdrop hidden" aria-hidden="true"></div>
+
+  <aside id="drawerShell" class="drawer-shell hidden" role="dialog" aria-modal="true" aria-label="Detalle de capítulo">
+    <!-- Vista A: Menú rápido de capítulos -->
+    <div id="drawerMenuView" class="drawer-menu-view hidden">
+      <h2 class="menu-heading">Chapters</h2>
+      <div id="chaptersMenuList" class="chapters-menu-list"></div>
     </div>
 
-    <div class="deck-progress">
-      <div id="deckProgressFill" class="deck-progress-fill"></div>
-    </div>
+    <!-- Vista B: Split-Pane Editorial Sheet (Izquierda #000717 | Derecha #ffffff) -->
+    <div id="drawerDetailView" class="drawer-detail-view hidden">
+      <div id="detailLeftPane" class="detail-left-pane"></div>
+      <div id="detailRightPane" class="detail-right-pane">
+        <div id="detailEditorialBody" class="detail-editorial-body"></div>
 
-    <div class="deck-controls">
-      <button id="btnPrev" class="nav-btn" type="button">← Anterior</button>
-      <button id="btnNext" class="nav-btn primary" type="button">Siguiente →</button>
-    </div>
-  </footer>
-
-  <!-- Modal de Índice Rápido (Tecla G) -->
-  <div id="indexModal" class="index-modal hidden" role="dialog" aria-modal="true" aria-label="Índice de diapositivas">
-    <div class="index-modal-inner">
-      <div class="index-head">
-        <h3>MAPA DE INMERSIÓN · ABYSSAL AI</h3>
-        <button id="btnCloseIndex" class="hud-btn" type="button">CERRAR <kbd>ESC</kbd></button>
+        <!-- Banner Keep Exploring estilo OceanX 2025 -->
+        <div class="keep-exploring-banner">
+          <img src="media/ocean_footer.jpg" alt="Superficie oceánica profunda" class="keep-bg" />
+          <div class="keep-overlay"></div>
+          <div class="keep-content">
+            <span class="eyebrow-row"><i class="sq"></i><span class="mono-12">ABYSSAL AI · EXPEDITION LOG</span></span>
+            <h3>Seguir Explorando</h3>
+            <div class="keep-actions">
+              <button id="btnNextChapter" class="pill-cta white" type="button">
+                <span class="pill-cta-label">
+                  <span class="bw1">NEXT CHAPTER</span>
+                  <span class="bw2">NEXT CHAPTER</span>
+                </span>
+                <span class="orange-dot" aria-hidden="true"></span>
+              </button>
+              <button id="btnBackTimeline" class="pill-cta glass" type="button">
+                <span class="pill-cta-label">
+                  <span class="bw1">BACK TO TIMELINE</span>
+                  <span class="bw2">BACK TO TIMELINE</span>
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
-      <div id="indexGrid" class="index-grid"></div>
     </div>
-  </div>
-
-  <script src="app.js" defer></script>
+  </aside>
 </body>
 </html>
