@@ -4,36 +4,71 @@
   const $ = (sel, root = document) => root.querySelector(sel);
   const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
 
-  /* ---------- Métricas de respaldo offline (compatible con file:// y HTTP) ---------- */
+  /* ---------- Métricas de respaldo offline (datos reales verificados de Colab T4) ---------- */
   const FALLBACK_METRICS = {
-    status: "preview_pending_colab",
+    status: "verified",
     model: "yolo11n-seg.pt",
-    dataset: "TrashCan 1.0 (Taxonomía Operativa 4 Clases)",
+    dataset: "TrashCan 1.0 (Operational 4-Class)",
     total_epochs: 50,
-    best_epoch: 46,
+    best_epoch: 49,
     summary: {
-      map50_mask: 0.742,
-      map50_95_mask: 0.518,
-      map50_box: 0.786,
-      map50_95_box: 0.564,
-      precision_mask: 0.791,
-      recall_mask: 0.715,
-      final_train_seg_loss: 0.812,
-      inference_ms_t4: 9.4,
+      map50_mask: 0.5206,
+      map50_95_mask: 0.3131,
+      map50_box: 0.5387,
+      map50_95_box: 0.381,
+      precision_mask: 0.781,
+      recall_mask: 0.4891,
+      final_train_seg_loss: 1.4992,
+      inference_ms_t4: 3.21,
     },
     epochs: [
-      { epoch: 1, train_box_loss: 1.98, train_seg_loss: 2.84, val_seg_loss: 2.61, map50_box: 0.31, map50_95_box: 0.16, map50_mask: 0.27, map50_95_mask: 0.14 },
-      { epoch: 5, train_box_loss: 1.62, train_seg_loss: 2.15, val_seg_loss: 1.98, map50_box: 0.49, map50_95_box: 0.28, map50_mask: 0.45, map50_95_mask: 0.25 },
-      { epoch: 10, train_box_loss: 1.38, train_seg_loss: 1.68, val_seg_loss: 1.54, map50_box: 0.61, map50_95_box: 0.38, map50_mask: 0.57, map50_95_mask: 0.34 },
-      { epoch: 15, train_box_loss: 1.24, train_seg_loss: 1.42, val_seg_loss: 1.33, map50_box: 0.67, map50_95_box: 0.44, map50_mask: 0.63, map50_95_mask: 0.40 },
-      { epoch: 20, train_box_loss: 1.12, train_seg_loss: 1.25, val_seg_loss: 1.21, map50_box: 0.71, map50_95_box: 0.48, map50_mask: 0.67, map50_95_mask: 0.44 },
-      { epoch: 25, train_box_loss: 1.03, train_seg_loss: 1.12, val_seg_loss: 1.13, map50_box: 0.74, map50_95_box: 0.51, map50_mask: 0.70, map50_95_mask: 0.47 },
-      { epoch: 30, train_box_loss: 0.96, train_seg_loss: 1.03, val_seg_loss: 1.07, map50_box: 0.76, map50_95_box: 0.53, map50_mask: 0.71, map50_95_mask: 0.48 },
-      { epoch: 35, train_box_loss: 0.90, train_seg_loss: 0.95, val_seg_loss: 1.02, map50_box: 0.77, map50_95_box: 0.54, map50_mask: 0.72, map50_95_mask: 0.50 },
-      { epoch: 40, train_box_loss: 0.86, train_seg_loss: 0.89, val_seg_loss: 0.99, map50_box: 0.78, map50_95_box: 0.55, map50_mask: 0.73, map50_95_mask: 0.51 },
-      { epoch: 46, train_box_loss: 0.82, train_seg_loss: 0.83, val_seg_loss: 0.96, map50_box: 0.786, map50_95_box: 0.564, map50_mask: 0.742, map50_95_mask: 0.518 },
-      { epoch: 50, train_box_loss: 0.80, train_seg_loss: 0.812, val_seg_loss: 0.97, map50_box: 0.784, map50_95_box: 0.561, map50_mask: 0.740, map50_95_mask: 0.516 },
+      { epoch: 1, train_box_loss: 1.2796, train_seg_loss: 2.6558, val_seg_loss: 2.847, map50_box: 0.2144, map50_95_box: 0.1212, map50_mask: 0.2064, map50_95_mask: 0.1095 },
+      { epoch: 5, train_box_loss: 1.2833, train_seg_loss: 2.5286, val_seg_loss: 2.6467, map50_box: 0.2932, map50_95_box: 0.171, map50_mask: 0.2785, map50_95_mask: 0.1429 },
+      { epoch: 10, train_box_loss: 1.1381, train_seg_loss: 2.2231, val_seg_loss: 2.4453, map50_box: 0.3727, map50_95_box: 0.2287, map50_mask: 0.3541, map50_95_mask: 0.1863 },
+      { epoch: 15, train_box_loss: 1.0767, train_seg_loss: 2.0829, val_seg_loss: 2.5234, map50_box: 0.4324, map50_95_box: 0.2728, map50_mask: 0.4049, map50_95_mask: 0.2138 },
+      { epoch: 20, train_box_loss: 1.0099, train_seg_loss: 1.9853, val_seg_loss: 2.1626, map50_box: 0.4932, map50_95_box: 0.322, map50_mask: 0.4719, map50_95_mask: 0.2607 },
+      { epoch: 25, train_box_loss: 0.947, train_seg_loss: 1.8662, val_seg_loss: 2.0849, map50_box: 0.4995, map50_95_box: 0.3373, map50_mask: 0.4789, map50_95_mask: 0.2745 },
+      { epoch: 30, train_box_loss: 0.9211, train_seg_loss: 1.7716, val_seg_loss: 2.0571, map50_box: 0.5296, map50_95_box: 0.3603, map50_mask: 0.5024, map50_95_mask: 0.2893 },
+      { epoch: 35, train_box_loss: 0.8662, train_seg_loss: 1.6804, val_seg_loss: 1.9978, map50_box: 0.5325, map50_95_box: 0.3719, map50_mask: 0.5148, map50_95_mask: 0.3025 },
+      { epoch: 40, train_box_loss: 0.8378, train_seg_loss: 1.659, val_seg_loss: 1.9742, map50_box: 0.5414, map50_95_box: 0.3793, map50_mask: 0.5227, map50_95_mask: 0.3103 },
+      { epoch: 45, train_box_loss: 0.7952, train_seg_loss: 1.5185, val_seg_loss: 1.9868, map50_box: 0.5362, map50_95_box: 0.379, map50_mask: 0.5166, map50_95_mask: 0.3098 },
+      { epoch: 49, train_box_loss: 0.7894, train_seg_loss: 1.5163, val_seg_loss: 1.9798, map50_box: 0.5387, map50_95_box: 0.381, map50_mask: 0.5206, map50_95_mask: 0.3131 },
+      { epoch: 50, train_box_loss: 0.7804, train_seg_loss: 1.4992, val_seg_loss: 1.9761, map50_box: 0.5397, map50_95_box: 0.3823, map50_mask: 0.5203, map50_95_mask: 0.3125 },
     ],
+  };
+
+  const PER_CLASS_VAL_METRICS = [
+    { name: "rov_hardware", color: "#8b5cf6", instances: 1271, p: 0.906, r: 0.652, map50: 0.670, map5095: 0.515 },
+    { name: "debris_rigid_other", color: "#ffb703", instances: 1114, p: 0.819, r: 0.614, map50: 0.651, map5095: 0.357 },
+    { name: "protected_marine_life", color: "#00b880", instances: 786, p: 0.620, r: 0.449, map50: 0.471, map5095: 0.204 },
+    { name: "debris_flexible_polymer", color: "#0077b6", instances: 875, p: 0.747, r: 0.267, map50: 0.288, map5095: 0.175 },
+  ];
+
+  const ULTRALYTICS_PLOTS = {
+    confusion: {
+      label: "Matriz Confusión",
+      src: "media/confusion_matrix_normalized.png",
+      alt: "Matriz de confusión normalizada de validación YOLO11n-seg",
+      caption: "Matriz normalizada sobre el split val (1,147 imágenes): muestra baja confusión cruzada entre residuos sólidos y fauna marina; la mayor pérdida proviene de falsos negativos hacia el fondo marino en plásticos translúcidos.",
+    },
+    pr: {
+      label: "Curva PR",
+      src: "media/MaskPR_curve.png",
+      alt: "Curva Precision-Recall de máscaras YOLO11n-seg",
+      caption: "Curva Precisión-Recall de segmentación de instancias (mAP@50 global = 0.521): rov_hardware (0.670) y debris_rigid_other (0.651) lideran en separabilidad frente a polímeros flexibles.",
+    },
+    f1: {
+      label: "Curva F1",
+      src: "media/MaskF1_curve.png",
+      alt: "Curva F1 vs Confianza de máscaras YOLO11n-seg",
+      caption: "Curva F1 frente a umbral de confianza: fundamenta el punto operativo equilibrado alrededor de conf = 0.25–0.35 usado por el visor del ROV.",
+    },
+    results: {
+      label: "Resumen 50 Épocas",
+      src: "media/results.png",
+      alt: "Gráficas oficiales de entrenamiento y validación Ultralytics en 50 épocas",
+      caption: "Panel oficial de Ultralytics tras 50 épocas en GPU Tesla T4: descenso sostenido de box_loss, seg_loss y cls_loss sin sobreajuste severo, alcanzando mejor checkpoint en la época 49.",
+    },
   };
 
   const CHAPTERS = [
@@ -178,6 +213,7 @@
   /* ---------- Estado Global ---------- */
   let activeMetrics = FALLBACK_METRICS;
   let activeChartMode = "map";
+  let activePlotKey = "confusion";
   let currentChapterIdx = 0;
   let drawerState = "closed";
   let activeDetailIdx = 0;
@@ -186,10 +222,12 @@
   let targetProgress = 0;
   const mouse = { x: 0, y: 0, nx: 0, ny: 0 };
 
+  let hasRealVideoAssets = false;
   let usingRealVideo = false;
   let realRawUrl = null;
   let realSegUrl = null;
   let realTelemetryFrames = null;
+  let lastTelemetryIdx = -1;
   let visorMode = "hud";
   let visorPlaying = true;
   let simTick = 0;
@@ -579,33 +617,33 @@
             <div class="sat-reticle-label mono-12">POLÍGONOS GROUND TRUTH<br />POLÍMERO FLEXIBLE vs CORAL</div>
           </div>
           <div class="sat-footer-bar mono-10">
-            <span>FUENTE: TRASHCAN 1.0 (J-EDI)</span>
-            <span>7,212 FOTOGRAMAS RGB REALES</span>
+            <span>TRAIN: 6,065 IMGS (13,962 POLÍGONOS)</span>
+            <span>VAL: 1,147 IMGS (4,050 POLÍGONOS)</span>
           </div>
         </div>
       `;
       detailEditorialBody.innerHTML = `
         ${headerBadges}
         <h3>Consolidación de 22 categorías marinas en 4 clases operativas accionables.</h3>
-        <p class="editorial-p">En lugar de dispersar el modelo en subclases escasas, <code>src/dataset_utils.py</code> convierte las anotaciones poligonales COCO de la Universidad de Minnesota y JAMSTEC al formato normalizado <code>YOLO-seg [0, 1]</code> agrupado por acción robótica:</p>
+        <p class="editorial-p">En lugar de dispersar el modelo en subclases escasas, nuestra conversión COCO → <code>YOLO-seg [0, 1]</code> procesó exactamente <strong>6,065 imágenes de entrenamiento</strong> (13,962 polígonos) y <strong>1,147 imágenes de validación</strong> (4,050 polígonos) agrupados por acción robótica:</p>
         <div class="ed-tax-grid">
           <div class="ed-tax-card">
-            <span class="mono-10">CLASE 00 · #90E0EF</span>
+            <span class="mono-10">CLASE 00 · 2,098 TRAIN / 875 VAL</span>
             <h4>debris_flexible_polymer</h4>
             <p>Bolsas, botellas, redes fantasma, cuerdas y textiles (<code>trash_bag</code>, <code>trash_bottle</code>, <code>trash_net</code>, <code>trash_rope</code>). Prioridad máxima de agarre suave.</p>
           </div>
           <div class="ed-tax-card" style="border-top-color:#ffb703;">
-            <span class="mono-10">CLASE 01 · #FFB703</span>
+            <span class="mono-10">CLASE 01 · 4,531 TRAIN / 1,114 VAL</span>
             <h4>debris_rigid_other</h4>
             <p>Latas, tuberías, contenedores y chatarra metálica sumergida (<code>trash_can</code>, <code>trash_pipe</code>, <code>trash_wreckage</code>). Ajuste de torque en pinza.</p>
           </div>
           <div class="ed-tax-card" style="border-top-color:#00b880;">
-            <span class="mono-10">CLASE 02 · #00E5A0</span>
+            <span class="mono-10">CLASE 02 · 2,739 TRAIN / 786 VAL</span>
             <h4>protected_marine_life</h4>
             <p>Peces, cangrejos, estrellas de mar, corales y flora (<code>animal_*</code>, <code>plant</code>). Activa el perímetro de bio-exclusión que bloquea la pinza.</p>
           </div>
           <div class="ed-tax-card" style="border-top-color:#8b5cf6;">
-            <span class="mono-10">CLASE 03 · #8B5CF6</span>
+            <span class="mono-10">CLASE 03 · 4,594 TRAIN / 1,275 VAL</span>
             <h4>rov_hardware</h4>
             <p>Partes visibles del propio manipulador o chasis del ROV en cámara (<code>rov</code>). Evita auto-detección errónea como residuo.</p>
           </div>
@@ -651,6 +689,23 @@
       initArchDiagramInteractive();
     } else if (idx === 3) {
       const isVerified = activeMetrics.status === "verified";
+      const s = activeMetrics.summary || {};
+      const bestEpoch = activeMetrics.best_epoch || 49;
+      const plotCfg = ULTRALYTICS_PLOTS[activePlotKey] || ULTRALYTICS_PLOTS.confusion;
+      const plotTabsHtml = Object.entries(ULTRALYTICS_PLOTS).map(([k, v]) => `
+        <button class="ed-tab-btn ${activePlotKey === k ? "active" : ""}" data-plot="${k}" type="button">${v.label}</button>
+      `).join("");
+      const classRowsHtml = PER_CLASS_VAL_METRICS.map((c) => `
+        <tr>
+          <td><span class="ed-class-name"><i class="ed-class-dot" style="background:${c.color};"></i>${c.name}</span></td>
+          <td class="num">${c.instances.toLocaleString("en-US")}</td>
+          <td class="num">${(c.p * 100).toFixed(1)}%</td>
+          <td class="num">${(c.r * 100).toFixed(1)}%</td>
+          <td class="num"><strong>${(c.map50 * 100).toFixed(1)}%</strong></td>
+          <td class="num">${(c.map5095 * 100).toFixed(1)}%</td>
+        </tr>
+      `).join("");
+
       detailLeftPane.innerHTML = `
         <div class="stage-dark-console">
           <div class="stage-dark-header">
@@ -666,33 +721,65 @@
           </div>
         </div>
       `;
-      const s = activeMetrics.summary || {};
       detailEditorialBody.innerHTML = `
         ${headerBadges}
         <h3>Validación cuantitativa sobre máscaras vs. cajas y exportación a ONNX.</h3>
-        <p class="editorial-p">Estado actual de <code>docs/media/metrics_summary.json</code>: <strong>${isVerified ? "CORRIDA VERIFICADA DE COLAB (Pesos reales cargados)" : "DATOS DE VISTA PREVIA (Ejecuta el notebook en Colab para cargar tus pesos reales)"}</strong>.</p>
-        <div class="editorial-stat-grid">
-          <div class="ed-stat-card"><strong>${((s.map50_mask || 0) * 100).toFixed(1)}%</strong><span>mAP@50 (Máscara)</span></div>
-          <div class="ed-stat-card"><strong>${((s.map50_95_mask || 0) * 100).toFixed(1)}%</strong><span>mAP@50-95 (Máscara)</span></div>
-          <div class="ed-stat-card"><strong>${(s.inference_ms_t4 || 9.4).toFixed(1)} ms</strong><span>Latencia GPU T4</span></div>
+        <p class="editorial-p">Estado de <code>docs/media/metrics_summary.json</code>: <strong>${isVerified ? `CORRIDA VERIFICADA DE COLAB (Mejor época ${bestEpoch}/${activeMetrics.total_epochs || 50} · Tesla T4)` : "DATOS DE VISTA PREVIA"}</strong>. Modelo compacto <code>YOLO11n-seg</code> de 114 capas, 2.85M parámetros y 9.7 GFLOPs entrenado sobre 7,212 fotogramas reales.</p>
+        <div class="editorial-stat-grid cols-4">
+          <div class="ed-stat-card"><strong>${((s.map50_mask || 0) * 100).toFixed(1)}%</strong><span>mAP@50 Máscara</span></div>
+          <div class="ed-stat-card"><strong>${((s.map50_95_mask || 0) * 100).toFixed(1)}%</strong><span>mAP@50-95 Máscara</span></div>
+          <div class="ed-stat-card"><strong>${((s.precision_mask || 0) * 100).toFixed(1)}%</strong><span>Precisión Máscara</span></div>
+          <div class="ed-stat-card"><strong>${Number(s.inference_ms_t4 || 3.21).toFixed(1)} ms</strong><span>Inferencia GPU T4</span></div>
         </div>
         <div class="ed-chart-wrap">
           <div class="ed-chart-head">
             <strong id="chartTitle" class="mono-12">Evolución mAP por Época (Máscara vs Caja)</strong>
-            <div style="display:flex; gap:6px;">
+            <div style="display:flex; gap:6px; flex-wrap:wrap;">
               <button class="ed-tab-btn ${activeChartMode === "map" ? "active" : ""}" data-chart="map" type="button">mAP@50 / 50-95</button>
               <button class="ed-tab-btn ${activeChartMode === "loss" ? "active" : ""}" data-chart="loss" type="button">Convergencia Pérdidas</button>
             </div>
           </div>
           <canvas id="metricsChart" width="620" height="240"></canvas>
         </div>
+        <div class="ed-class-table-wrap">
+          <div class="ed-section-head">
+            <strong class="mono-12">Desglose Real por Clase (Split Val · 1,147 imgs · 4,046 instancias)</strong>
+            <span class="mono-10" style="color:#4f7288;">MÁSCARA RECALL GLOBAL: ${((s.recall_mask || 0) * 100).toFixed(1)}%</span>
+          </div>
+          <table class="ed-class-table">
+            <thead>
+              <tr>
+                <th>Clase Operativa</th>
+                <th class="num">Inst.</th>
+                <th class="num">Precisión</th>
+                <th class="num">Recall</th>
+                <th class="num">mAP@50</th>
+                <th class="num">mAP@50-95</th>
+              </tr>
+            </thead>
+            <tbody>${classRowsHtml}</tbody>
+          </table>
+          <div class="ed-note-box">
+            <strong>Lectura técnica real:</strong> La precisión elevada (<strong>78.1%</strong> global; <strong>81.9%</strong> en chatarra rígida y <strong>74.7%</strong> en polímeros flexibles) evita disparos o agarres falsos de la pinza ROV. El recall menor en bolsas y plásticos translúcidos (<strong>26.7%</strong>) refleja el desafío físico real de bajo contraste y turbidez en TrashCan 1.0.
+          </div>
+        </div>
+        <div class="ed-plots-wrap">
+          <div class="ed-section-head">
+            <strong class="mono-12">Evidencia Oficial de Ultralytics (Colab T4)</strong>
+            <div class="ed-plots-tabs">${plotTabsHtml}</div>
+          </div>
+          <div class="ed-plot-frame">
+            <img id="ultralyticsPlotImg" src="${plotCfg.src}" alt="${plotCfg.alt}" />
+          </div>
+          <p id="ultralyticsPlotCaption" class="ed-plot-caption">${plotCfg.caption}</p>
+        </div>
       `;
       playColabTerminal();
       drawMetricsChart();
       $("#btnReplayTerm", detailLeftPane).addEventListener("click", playColabTerminal);
-      $$(".ed-tab-btn", detailEditorialBody).forEach((btn) => {
+      $$(".ed-tab-btn[data-chart]", detailEditorialBody).forEach((btn) => {
         btn.addEventListener("click", () => {
-          $$(".ed-tab-btn", detailEditorialBody).forEach((b) => b.classList.remove("active"));
+          $$(".ed-tab-btn[data-chart]", detailEditorialBody).forEach((b) => b.classList.remove("active"));
           btn.classList.add("active");
           activeChartMode = btn.dataset.chart || "map";
           $("#chartTitle", detailEditorialBody).textContent = activeChartMode === "map"
@@ -701,21 +788,38 @@
           drawMetricsChart();
         });
       });
+      $$(".ed-tab-btn[data-plot]", detailEditorialBody).forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const k = btn.dataset.plot || "confusion";
+          const nextPlot = ULTRALYTICS_PLOTS[k];
+          if (!nextPlot) return;
+          activePlotKey = k;
+          $$(".ed-tab-btn[data-plot]", detailEditorialBody).forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
+          $("#ultralyticsPlotImg", detailEditorialBody).src = nextPlot.src;
+          $("#ultralyticsPlotImg", detailEditorialBody).alt = nextPlot.alt;
+          $("#ultralyticsPlotCaption", detailEditorialBody).textContent = nextPlot.caption;
+        });
+      });
     } else if (idx === 4) {
       detailLeftPane.innerHTML = `
         <div class="stage-dark-console">
           <div class="stage-dark-header">
-            <span id="demoSourceBadge" class="mono-10" style="color:var(--cyan);">${usingRealVideo ? "CLIP PRE-RENDERIZADO COLAB (REAL)" : "SIMULACIÓN FOTOGRÁFICA ROV EN VIVO"}</span>
-            <label class="dark-mini-btn" style="cursor:pointer;">
-              <span>Cargar Media Colab</span>
-              <input id="bundleFileInput" type="file" multiple accept=".mp4,.json" hidden />
-            </label>
+            <span id="demoSourceBadge" class="mono-10" style="color:var(--cyan);">${usingRealVideo ? "VIDEO REAL COLAB · YOLO11N-SEG (480×270)" : "SIMULADOR FOTOGRÁFICO · BIO-EXCLUSIÓN < 45 PX"}</span>
+            <div class="source-toggle-group">
+              <button id="btnSrcReal" class="dark-mini-btn ${usingRealVideo ? "active" : ""}" type="button" ${hasRealVideoAssets ? "" : "disabled"}>VIDEO REAL COLAB</button>
+              <button id="btnSrcSim" class="dark-mini-btn ${!usingRealVideo ? "active" : ""}" type="button">SIMULADOR BIO-EXCLUSIÓN</button>
+              <label class="dark-mini-btn" style="cursor:pointer;">
+                <span>Cargar Media</span>
+                <input id="bundleFileInput" type="file" multiple accept=".mp4,.json" hidden />
+              </label>
+            </div>
           </div>
           <div class="rov-visor-box">
-            <canvas id="rovSimCanvas" width="760" height="475"></canvas>
+            <canvas id="rovSimCanvas" width="768" height="432"></canvas>
             <div id="videoDualWrap" class="video-dual-wrap hidden">
-              <video id="vidRaw" muted loop playsinline></video>
-              <video id="vidSeg" muted loop playsinline></video>
+              <video id="vidRaw" muted loop playsinline preload="auto"></video>
+              <video id="vidSeg" muted loop playsinline preload="auto"></video>
               <div id="videoSplitDivider" class="video-split-divider hidden"></div>
             </div>
           </div>
@@ -733,19 +837,19 @@
       detailEditorialBody.innerHTML = `
         ${headerBadges}
         <h3>Consola de visión en vivo con protocolo automático de bio-exclusión.</h3>
-        <p class="editorial-p">Cada máscara calcula área real en píxeles, centroide de agarre y distancia mínima hacia fauna protegida. Cuando un pez cruza el umbral (&lt; 45 px), el estado cambia en tiempo real a <strong>BLOQUEO BIO-EXCLUSIÓN</strong>.</p>
+        <p class="editorial-p">En <strong>VIDEO REAL COLAB</strong> se reproduce la secuencia real de validación JAMSTEC (180 fotogramas) inferida con nuestros pesos <code>best.pt</code>. Cambia a <strong>SIMULADOR BIO-EXCLUSIÓN</strong> para probar el disparo en tiempo real del bloqueo (<code>&lt; 45 px</code>) cuando un pez se acerca al residuo.</p>
         <div id="telStatusBox" class="ed-tel-status">
           <span class="mono-12">PROTOCOLO DE PINZA ROV</span>
           <strong id="telGraspStatus">AGARRE SEGURO</strong>
         </div>
         <div class="editorial-stat-grid">
-          <div class="ed-stat-card"><strong id="telFps">60.0</strong><span>FPS Visor</span></div>
-          <div class="ed-stat-card"><strong id="telWastePct">59.2%</strong><span>Ruido BBox Evitado</span></div>
-          <div class="ed-stat-card"><strong id="telBioDist">142 px</strong><span>Distancia Mín. Fauna</span></div>
+          <div class="ed-stat-card"><strong id="telFps">77.5</strong><span>FPS Inferencia</span></div>
+          <div class="ed-stat-card"><strong id="telWastePct">40.9%</strong><span>Ruido BBox Evitado</span></div>
+          <div class="ed-stat-card"><strong id="telBioDist">DESPEJADO</strong><span>Distancia Mín. Fauna</span></div>
         </div>
         <div class="ed-kv-row" style="margin-bottom:2rem;">
-          <div class="ed-kv-box"><span class="mono-10">ÁREA RESIDUO / LATENCIA</span><strong id="telAreaLat">8.4% · 9.4 ms</strong></div>
-          <div class="ed-kv-box"><span class="mono-10">CENTROIDE OBJETIVO</span><strong id="telCentroid">(276, 195)</strong></div>
+          <div class="ed-kv-box"><span class="mono-10">ÁREA RESIDUO / LATENCIA</span><strong id="telAreaLat">0.57% · 12.9 ms</strong></div>
+          <div class="ed-kv-box"><span class="mono-10">CENTROIDE OBJETIVO</span><strong id="telCentroid">(272, 91)</strong></div>
         </div>
         <span class="mono-10" style="color:#4f7288;">INSTANCIAS ACTIVAS EN CUADRO</span>
         <div id="telInstancesList" class="ed-inst-list"></div>
@@ -861,16 +965,18 @@
     pre.innerHTML = "";
     const lines = [
       { cls: "t-cmd", text: "$ nvidia-smi --query-gpu=name,memory.total --format=csv,noheader" },
-      { cls: "t-ok", text: "Tesla T4, 15360 MiB  |  CUDA 12.x Lista" },
+      { cls: "t-ok", text: "Tesla T4, 14913 MiB  |  Ultralytics 8.4.216  |  CUDA Lista" },
       { cls: "t-cmd", text: "$ curl -L ... -o dataset.zip  # TrashCan 1.0 (553 MB)" },
-      { cls: "", text: "Mapeando 22 clases JAMSTEC → 4 clases operativas ROV..." },
-      { cls: "t-ok", text: "Dataset validado: 6,065 imgs train / 1,147 imgs val · 0 errores" },
+      { cls: "", text: "Mapeando categorías JAMSTEC → 4 clases operativas ROV..." },
+      { cls: "t-ok", text: "Dataset validado: 6,065 imgs train (13,962 pol.) / 1,147 imgs val (4,050 pol.)" },
       { cls: "t-cmd", text: "$ yolo segment train model=yolo11n-seg.pt data=data.yaml epochs=50 imgsz=640" },
-      { cls: "", text: "Época 1/50   box_loss: 1.980  seg_loss: 2.840  mAP50(M): 0.270" },
-      { cls: "", text: "Época 25/50  box_loss: 1.030  seg_loss: 1.120  mAP50(M): 0.700" },
-      { cls: "t-ok", text: "Época 46/50  box_loss: 0.820  seg_loss: 0.830  mAP50(M): 0.742  mAP50-95(M): 0.518" },
-      { cls: "t-cmd", text: "$ yolo export model=best.pt format=onnx simplify=True" },
-      { cls: "t-ok", text: "Exportado: abyssal_web_bundle.zip (best.pt + métricas + rov_segmented.mp4)" },
+      { cls: "", text: "YOLO11n-seg summary: 114 layers, 2,850,196 parameters, 9.7 GFLOPs" },
+      { cls: "", text: "Época  1/50  box_loss: 1.280  seg_loss: 2.656  mAP50(M): 0.206" },
+      { cls: "", text: "Época 25/50  box_loss: 0.947  seg_loss: 1.866  mAP50(M): 0.479" },
+      { cls: "t-ok", text: "Época 49/50  box_loss: 0.789  seg_loss: 1.516  mAP50(M): 0.521  mAP50-95(M): 0.313" },
+      { cls: "t-ok", text: "Val best.pt  P(M): 0.781 | R(M): 0.489 | Speed T4: 3.21 ms/frame" },
+      { cls: "t-cmd", text: "$ yolo export model=best.pt format=onnx opset=18 simplify=True" },
+      { cls: "t-ok", text: "Exportado: best.pt (5.7 MB) + best.onnx (11.1 MB) + rov_segmented.mp4 (180 frames)" },
     ];
     for (const item of lines) {
       if (token !== termToken || drawerState !== "detail" || activeDetailIdx !== 3) return;
@@ -959,7 +1065,37 @@
     ctx.fillText(`Época ${maxEp}`, w - padR - 58, h - 8);
   }
 
-  /* ---------- Consola ROV en Vivo (Capítulo 05) sobre Fotografía Real ---------- */
+  /* ---------- Consola ROV en Vivo (Capítulo 05) Video Real Colab + Simulador Bio-Exclusión ---------- */
+  function switchVisorSource(useReal) {
+    if (useReal && (!hasRealVideoAssets || !realSegUrl)) return;
+    usingRealVideo = Boolean(useReal);
+    lastTelemetryIdx = -1;
+    const btnReal = $("#btnSrcReal", detailLeftPane);
+    const btnSim = $("#btnSrcSim", detailLeftPane);
+    if (btnReal) {
+      btnReal.disabled = !hasRealVideoAssets;
+      btnReal.classList.toggle("active", usingRealVideo);
+    }
+    if (btnSim) btnSim.classList.toggle("active", !usingRealVideo);
+
+    const wrap = $("#videoDualWrap", detailLeftPane);
+    const canvas = $("#rovSimCanvas", detailLeftPane);
+    const vidRaw = $("#vidRaw", detailLeftPane);
+    const vidSeg = $("#vidSeg", detailLeftPane);
+    const badge = $("#demoSourceBadge", detailLeftPane);
+
+    if (usingRealVideo) {
+      mountRealVideoElements();
+    } else {
+      if (vidRaw) vidRaw.pause();
+      if (vidSeg) vidSeg.pause();
+      if (wrap) wrap.classList.add("hidden");
+      if (canvas) canvas.classList.remove("hidden");
+      if (badge) badge.textContent = "SIMULADOR FOTOGRÁFICO · BIO-EXCLUSIÓN < 45 PX";
+      simTick = 0;
+    }
+  }
+
   function bindLiveVisorControls() {
     $$("#visorModePills [data-mode]", detailLeftPane).forEach((btn) => {
       btn.addEventListener("click", () => {
@@ -969,6 +1105,9 @@
         syncRealVideoMode();
       });
     });
+
+    $("#btnSrcReal", detailLeftPane)?.addEventListener("click", () => switchVisorSource(true));
+    $("#btnSrcSim", detailLeftPane)?.addEventListener("click", () => switchVisorSource(false));
 
     $("#btnVisorPlay", detailLeftPane).addEventListener("click", (e) => {
       visorPlaying = !visorPlaying;
@@ -1007,13 +1146,13 @@
       if (sUrl || rUrl) {
         realRawUrl = rUrl || sUrl;
         realSegUrl = sUrl || rUrl;
-        realTelemetryFrames = tData?.frames || null;
-        usingRealVideo = true;
-        mountRealVideoElements();
+        realTelemetryFrames = tData?.frames || realTelemetryFrames;
+        hasRealVideoAssets = true;
+        switchVisorSource(true);
       }
     });
 
-    if (usingRealVideo && realSegUrl) mountRealVideoElements();
+    if (usingRealVideo && hasRealVideoAssets && realSegUrl) mountRealVideoElements();
   }
 
   function syncRealVideoMode() {
@@ -1046,12 +1185,20 @@
     const vidRaw = $("#vidRaw", detailLeftPane);
     const vidSeg = $("#vidSeg", detailLeftPane);
     if (!wrap || !vidRaw || !vidSeg) return;
-    vidRaw.src = realRawUrl;
-    vidSeg.src = realSegUrl;
+    if (vidRaw.getAttribute("src") !== realRawUrl) vidRaw.setAttribute("src", realRawUrl);
+    if (vidSeg.getAttribute("src") !== realSegUrl) vidSeg.setAttribute("src", realSegUrl);
     wrap.classList.remove("hidden");
     canvas.classList.add("hidden");
-    $("#demoSourceBadge", detailLeftPane).textContent = "CLIP PRE-RENDERIZADO COLAB (REAL)";
+    $("#demoSourceBadge", detailLeftPane).textContent = "VIDEO REAL COLAB · YOLO11N-SEG (480×270)";
+    const btnReal = $("#btnSrcReal", detailLeftPane);
+    const btnSim = $("#btnSrcSim", detailLeftPane);
+    if (btnReal) { btnReal.disabled = false; btnReal.classList.add("active"); }
+    if (btnSim) btnSim.classList.remove("active");
     syncRealVideoMode();
+    if (realTelemetryFrames && realTelemetryFrames.length > 0 && lastTelemetryIdx < 0) {
+      lastTelemetryIdx = 0;
+      updateEditorialTelemetry(realTelemetryFrames[0]);
+    }
     if (visorPlaying) {
       vidRaw.play().catch(() => {});
       vidSeg.play().catch(() => {});
@@ -1088,8 +1235,17 @@
     const statusEl = $("#telGraspStatus", detailEditorialBody);
     if (!statusBox || !statusEl) return;
     const isHold = tel.grasp_status === "BIO_EXCLUSION_HOLD" || tel.grasp_status === "BLOQUEO BIO-EXCLUSIÓN";
-    statusBox.classList.toggle("hold", isHold);
-    statusEl.textContent = isHold ? "BLOQUEO BIO-EXCLUSIÓN" : "AGARRE SEGURO";
+    const isScanning = tel.grasp_status === "SCANNING";
+    statusBox.classList.remove("hold", "scanning");
+    if (isHold) {
+      statusBox.classList.add("hold");
+      statusEl.textContent = "BLOQUEO BIO-EXCLUSIÓN";
+    } else if (isScanning) {
+      statusBox.classList.add("scanning");
+      statusEl.textContent = "ESCANEANDO ESCENA";
+    } else {
+      statusEl.textContent = "AGARRE SEGURO";
+    }
     $("#telFps", detailEditorialBody).textContent = Number(tel.fps || 60).toFixed(1);
     $("#telWastePct", detailEditorialBody).textContent = `${Number(tel.avg_bbox_waste_pct || 0).toFixed(1)}%`;
     $("#telBioDist", detailEditorialBody).textContent = tel.min_bio_distance_px !== null ? `${Number(tel.min_bio_distance_px).toFixed(0)} px` : "DESPEJADO";
@@ -1100,7 +1256,15 @@
     const listEl = $("#telInstancesList", detailEditorialBody);
     listEl.innerHTML = "";
     const barColors = { 0: "#0077b6", 1: "#e85d04", 2: "#00a878", 3: "#6c3fc5" };
-    (tel.instances || []).forEach((inst) => {
+    const insts = tel.instances || [];
+    if (insts.length === 0) {
+      const emptyRow = document.createElement("div");
+      emptyRow.className = "ed-inst-row";
+      emptyRow.textContent = "Sin instancias sobre el umbral en este cuadro";
+      listEl.appendChild(emptyRow);
+      return;
+    }
+    insts.forEach((inst) => {
       const pct = Math.round((inst.confidence || 0.9) * 100);
       const row = document.createElement("div");
       row.className = "ed-inst-row";
@@ -1161,10 +1325,18 @@
     function frame() {
       if (drawerState !== "detail" || activeDetailIdx !== 4) return;
       if (usingRealVideo) {
+        const vidRaw = $("#vidRaw", detailLeftPane);
         const vidSeg = $("#vidSeg", detailLeftPane);
+        if (vidRaw && vidSeg && !vidSeg.paused && Math.abs(vidRaw.currentTime - vidSeg.currentTime) > 0.12) {
+          vidRaw.currentTime = vidSeg.currentTime;
+        }
         if (realTelemetryFrames && realTelemetryFrames.length > 0 && vidSeg?.duration) {
           const r = vidSeg.currentTime / Math.max(0.1, vidSeg.duration);
-          updateEditorialTelemetry(realTelemetryFrames[Math.min(realTelemetryFrames.length - 1, Math.floor(r * realTelemetryFrames.length))]);
+          const fIdx = Math.min(realTelemetryFrames.length - 1, Math.floor(r * realTelemetryFrames.length));
+          if (fIdx !== lastTelemetryIdx) {
+            lastTelemetryIdx = fIdx;
+            updateEditorialTelemetry(realTelemetryFrames[fIdx]);
+          }
         }
         simRafId = requestAnimationFrame(frame);
         return;
@@ -1757,7 +1929,10 @@
     if (location.protocol === "file:") return;
     try {
       const mRes = await fetch("media/metrics_summary.json", { cache: "no-store" });
-      if (mRes.ok) activeMetrics = await mRes.json();
+      if (mRes.ok) {
+        activeMetrics = await mRes.json();
+        if (drawerState === "detail" && activeDetailIdx === 3) drawMetricsChart();
+      }
     } catch (_) {}
     try {
       const segCheck = await fetch("media/rov_segmented.mp4", { method: "HEAD" });
@@ -1771,7 +1946,9 @@
         realRawUrl = rawCheck.ok ? "media/rov_raw.mp4" : "media/rov_segmented.mp4";
         realSegUrl = "media/rov_segmented.mp4";
         realTelemetryFrames = tData?.frames || null;
+        hasRealVideoAssets = true;
         usingRealVideo = true;
+        if (drawerState === "detail" && activeDetailIdx === 4) switchVisorSource(true);
       }
     } catch (_) {}
   }

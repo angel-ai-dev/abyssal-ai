@@ -34,10 +34,10 @@
 - **Capítulo 02 (`2:15 – 3:30` · *7,212 Fotogramas Reales de ROV*):**
   - *Acción:* Clic en **`SIGUIENTE CAPÍTULO`** desde el banner *Seguir Explorando*.
   - Explica la fuente real: **`TrashCan 1.0`** (Universidad de Minnesota + JAMSTEC, imágenes reales de ROVs en el Mar de Japón).
-  - Detalla la consolidación de 22 clases originales en **4 clases operativas** (`debris_flexible_polymer`, `debris_rigid_other`, `protected_marine_life`, `rov_hardware`) y su utilidad directa en la toma de decisiones de la pinza robótica.
+  - Detalla la consolidación de categorías originales en **4 clases operativas** (`debris_flexible_polymer`, `debris_rigid_other`, `protected_marine_life`, `rov_hardware`) con split verificado de **6,065 imágenes Train (13,962 polígonos)** y **1,147 imágenes Val (4,050 polígonos)**, enfocado a decisiones directas de la pinza robótica.
 - **Capítulo 04 — Panel Izquierdo (`3:30 – 4:15` · *Fine-Tuning en la Nube y Métricas Reales*):**
-  - *Acción:* Avanza al Capítulo 04 y muestra la terminal de **Google Colab GPU T4**.
-  - Explica cómo el notebook descarga automáticamente `TrashCan 1.0`, convierte máscaras COCO a polígonos normalizados `[0, 1]`, valida los splits y ejecuta *fine-tuning* de `yolo11n-seg.pt` por 50 épocas sin exigir hardware local.
+  - *Acción:* Avanza al Capítulo 04 y muestra la terminal verificada de **Google Colab GPU T4**.
+  - Explica cómo el notebook descarga automáticamente `TrashCan 1.0`, convierte máscaras COCO a polígonos normalizados `[0, 1]`, valida los splits y ejecuta *fine-tuning* de `yolo11n-seg.pt` (`2.85M` parámetros, `9.7 GFLOPs`) durante 50 épocas sobre GPU Tesla T4, exportando `best.pt` y `best.onnx` sin exigir hardware local.
 
 ---
 
@@ -48,24 +48,28 @@
     - **Rama dual estilo YOLACT:** El *Detection Head* predice caja (`CIoU + DFL`), clase (`BCE`) y $k = 32$ coeficientes lineales $c$, mientras **ProtoNet** genera $32$ mapas prototipo espaciales $P$ de $160 \times 160$.
     - **Síntesis y pérdida:** $\text{Mask}_i = \sigma(P \cdot c_i^T)$ recortada al BBox, entrenada con pérdida multi-tarea $\mathcal{L}_{CIoU+DFL} + \mathcal{L}_{BCE(\text{Mask})} + \mathcal{L}_{BCE(\text{Cls})}$.
 - **Capítulo 04 — Panel Derecho (`5:20 – 5:55`):**
-  - Alterna entre `mAP@50 / 50-95` y `Convergencia Pérdidas` en la gráfica del panel editorial blanco, destacando la diferencia entre `mAP@50 (Máscara)` y `mAP@50-95 (Máscara)` + latencia en T4.
+  - Destaca las cifras reales verificadas en la mejor época (**49 / 50**): **`52.1% mAP@50 (Máscara)`**, **`31.3% mAP@50-95 (Máscara)`**, **`78.1% Precisión`** y **`3.21 ms / frame`** en GPU T4.
+  - Alterna entre `mAP@50 / 50-95` y `Convergencia Pérdidas`, muestra el desglose real por clase (`67.0% rov_hardware`, `65.1% debris_rigid_other`, `47.1% protected_marine_life`, `28.8% debris_flexible_polymer`) y recorre las pestañas de **Evidencia Oficial de Ultralytics** (`Matriz Confusión`, `Curva PR`, `Curva F1`, `Resumen 50 Épocas`).
 - **Capítulo 05 (`5:55 – 7:15` · *Segmentación en Video y Bio-Exclusión*):**
-  - *Acción en vivo:* Cambia entre `ORIGINAL`, `MÁSCARAS`, `DIVIDIDO` y `HUD + BIO`.
-  - Señala en la columna derecha cómo `cv2.contourArea` cuantifica el porcentaje de ruido evitado frente a cajas rectangulares y cómo el sistema pasa automáticamente de **`AGARRE SEGURO`** a **`BLOQUEO BIO-EXCLUSIÓN`** cuando un pez entra dentro del radio de seguridad (`< 45 px`).
+  - *Coreografía recomendada en vivo:*
+    1. Inicia automáticamente en **`VIDEO REAL COLAB`** (secuencia real JAMSTEC de 180 cuadros procesada por `best.pt`): cambia entre `ORIGINAL`, `MÁSCARAS` y `DIVIDIDO` mostrando cómo las máscaras reales evitan en promedio `40.9%` (hasta `85.9%`) de ruido de *bounding box*, alternando en vivo entre **`AGARRE SEGURO`** y **`ESCANEANDO ESCENA`** según `telemetry_frames.json`.
+    2. Haz clic en **`SIMULADOR BIO-EXCLUSIÓN`** para demostrar en vivo el disparo automático hacia **`BLOQUEO BIO-EXCLUSIÓN`** cuando un pez entra dentro del radio de seguridad (`< 45 px`).
 
 ---
 
 ### Bloque 4: Conclusiones y Roadmap (`7:15 – 8:00`) — **Fabián / Cierre Conjunto**
 - **Capítulo 06 → Globo 3D Cierre (`7:15 – 8:00`):**
-  - Resume resultados clave, limitaciones físicas (turbidez, *backscatter*, distancia 2D en píxeles) y escalabilidad a hardware embebido (`ONNX / TensorRT FP16` en **NVIDIA Jetson Orin Nano**, cámara estéreo 3D y *tracking* con ByteTrack).
-  - Cierra el panel para volver al globo 3D final (`Explora el Repositorio`) mostrando el enlace vivo a GitHub y Colab.
+  - Resume resultados clave, limitaciones físicas (turbidez, *backscatter*, bajo contraste en plásticos translúcidos, distancia 2D en píxeles) y escalabilidad a hardware embebido (`ONNX / TensorRT FP16` en **NVIDIA Jetson Orin Nano**, cámara estéreo 3D y *tracking* con ByteTrack).
+  - Cierra el panel para volver al globo 3D final (`Explora el Repositorio`) mostrando el enlace vivo a GitHub, Colab y pesos descargables.
 
 ---
 
 ## Hoja de Defensa Rápida (Preguntas del Profesor)
 
-- **¿Por qué consolidaron las 22 clases de TrashCan en 4 clases operativas?**  
-  Porque varias subclases comparten la misma acción física de agarre y algunas tienen pocas muestras; consolidar en `flexible_polymer`, `rigid_other`, `protected_marine_life` y `rov_hardware` reduce el desbalanceo y traduce la salida de la red en decisiones directas de manipulación segura.
+- **¿Por qué `debris_flexible_polymer` tiene 74.7% de precisión pero 26.7% de recall?**  
+  Porque bolsas plásticas, cuerdas finas y plásticos translúcidos pierden contraste de borde bajo turbidez profunda y retrodispersión LED en TrashCan 1.0. Tener alta precisión (`74.7%` en polímeros y `78.1%` global) garantiza que el ROV no dispare agarres falsos sobre corales, mientras que el recall puede elevarse en iteraciones futuras con preprocesamiento de *dehazing* submarino, resolución `imgsz=960` o escalando a `yolo11s-seg`.
+- **¿Por qué consolidaron las clases de TrashCan en 4 clases operativas?**  
+  Porque varias subclases comparten la misma acción física de agarre y algunas tienen pocas muestras; consolidar en `debris_flexible_polymer`, `debris_rigid_other`, `protected_marine_life` y `rov_hardware` reduce el desbalanceo y traduce la salida de la red en decisiones directas de manipulación segura.
 - **¿Cómo funciona la función de pérdida en `YOLO11-seg`?**  
   Suma $\mathcal{L}_{CIoU} + \mathcal{L}_{DFL}$ para caja, $\mathcal{L}_{BCE}$ para clasificación y $\mathcal{L}_{BCE\_Mask}$ pixel a pixel dentro del área del *bounding box* comparando $\sigma(P \cdot c^T)$ contra el *ground-truth*.
 - **¿Por qué `YOLO11n-seg` y no SAM 2 en un ROV?**  
